@@ -1,0 +1,563 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>SpringMVC | Zzzz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="lmg">
+    
+
+    
+    <meta name="description" content="springmvc 介绍springmvc是spring框架的一个模块，属于表现层框架，springmvc和spring无需通过中间整合层进行整合
+架构流程
+用户发送请求（request）至前端控制器DispatcherServlet
+DispatcherServlet收到请求调用HandlerMapping处理器映射器
+处理器映射器根据请求url找到具体的处理器，生成处理器对象及处理器拦截器（如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC">
+<meta property="og:url" content="http://yoursite.com/2015/06/07/springmvc-framework/index.html">
+<meta property="og:site_name" content="Zzzz">
+<meta property="og:description" content="springmvc 介绍springmvc是spring框架的一个模块，属于表现层框架，springmvc和spring无需通过中间整合层进行整合
+架构流程
+用户发送请求（request）至前端控制器DispatcherServlet
+DispatcherServlet收到请求调用HandlerMapping处理器映射器
+处理器映射器根据请求url找到具体的处理器，生成处理器对象及处理器拦截器（如">
+<meta property="og:image" content="http://7xjkgu.com1.z0.glb.clouddn.com/image/spring.png">
+<meta property="og:updated_time" content="2015-06-08T10:07:32.118Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC">
+<meta name="twitter:description" content="springmvc 介绍springmvc是spring框架的一个模块，属于表现层框架，springmvc和spring无需通过中间整合层进行整合
+架构流程
+用户发送请求（request）至前端控制器DispatcherServlet
+DispatcherServlet收到请求调用HandlerMapping处理器映射器
+处理器映射器根据请求url找到具体的处理器，生成处理器对象及处理器拦截器（如">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zzzz" title="Zzzz"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zzzz">Zzzz</a></h1>
+				<h2 class="blog-motto">Do your best under limited conditions</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/07/springmvc-framework/" title="SpringMVC" itemprop="url">SpringMVC</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-07T12:52:58.000Z" itemprop="datePublished"> 发表于 2015-06-07</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#springmvc_介绍"><span class="toc-number">1.</span> <span class="toc-text">springmvc 介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#架构流程"><span class="toc-number">2.</span> <span class="toc-text">架构流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#组件说明"><span class="toc-number">3.</span> <span class="toc-text">组件说明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DispatcherServlet_前端控制器"><span class="toc-number">3.1.</span> <span class="toc-text">DispatcherServlet 前端控制器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HandlerMapping_处理器映射器"><span class="toc-number">3.2.</span> <span class="toc-text">HandlerMapping 处理器映射器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HandlerAdapter_处理器适配器"><span class="toc-number">3.3.</span> <span class="toc-text">HandlerAdapter 处理器适配器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置"><span class="toc-number">4.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#组件扫描器"><span class="toc-number">4.1.</span> <span class="toc-text">组件扫描器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RequestMappingHandlerMapping"><span class="toc-number">4.2.</span> <span class="toc-text">RequestMappingHandlerMapping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RequestMappingHandlerAdapter"><span class="toc-number">4.3.</span> <span class="toc-text">RequestMappingHandlerAdapter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-number">4.4.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#springmvc+mybatis整合"><span class="toc-number">5.</span> <span class="toc-text">springmvc+mybatis整合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#spring参数绑定过程"><span class="toc-number">6.</span> <span class="toc-text">spring参数绑定过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单类型"><span class="toc-number">6.1.</span> <span class="toc-text">简单类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单pojo"><span class="toc-number">6.2.</span> <span class="toc-text">简单pojo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义参数绑定实现日期类型绑定"><span class="toc-number">6.2.1.</span> <span class="toc-text">自定义参数绑定实现日期类型绑定</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#自定义Converter"><span class="toc-number">6.2.1.1.</span> <span class="toc-text">自定义Converter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置方式"><span class="toc-number">6.2.1.2.</span> <span class="toc-text">配置方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#包装pojo"><span class="toc-number">6.3.</span> <span class="toc-text">包装pojo</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#post中文乱码"><span class="toc-number">7.</span> <span class="toc-text">post中文乱码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#springmvc和struts2的区别"><span class="toc-number">8.</span> <span class="toc-text">springmvc和struts2的区别</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="springmvc_介绍">springmvc 介绍</h1><p>springmvc是spring框架的一个模块，属于表现层框架，springmvc和spring无需通过中间整合层进行整合<br><img src="http://7xjkgu.com1.z0.glb.clouddn.com/image/spring.png" alt="spring"></p>
+<h1 id="架构流程">架构流程</h1><ol>
+<li>用户发送请求（request）至前端控制器DispatcherServlet</li>
+<li>DispatcherServlet收到请求调用HandlerMapping处理器映射器</li>
+<li>处理器映射器根据请求url找到具体的处理器，生成处理器对象及处理器拦截器（如果有则生成）并返回给DispatcherServlet</li>
+<li>DispatcherServlet通过HandlerAdapter处理器适配器调用处理器</li>
+<li>执行处理器（Controller，也叫后端处理器）</li>
+<li>Controller执行完成返回ModelAndView</li>
+<li>HandlerAdapter将Controller执行结果ModelAndView返回给DispatcherServlet</li>
+<li>DispatcherServlet将ModelAndView传给ViewResolver视图解析器</li>
+<li>ViewResolver解析后返回具体View</li>
+<li>DispatcherServlet将view进行视图渲染（将模型数据填充值视图中）</li>
+<li>DispatcherServlet响应（response）用户  <h1 id="组件说明">组件说明</h1>以下组件通常使用框架提供实现：</li>
+</ol>
+<ul>
+<li><p>DispatcherServlet：前端控制器    </p>
+<p>   用户请求到达前端控制器，相当于mvc模块中的c，DispatcherServlet是整个流程控制的中心，由它调用其他组件处理用户的请求，DispatcherServlet的存在降低了组件之间的耦合性</p>
+</li>
+<li><p>HandlerMapping：处理器映射器</p>
+<p>  HandlerMapping负责根据用户请求找到Handler，spingmvc提供了不同的映射器实现不同的映射方式，例如：配置文件方式，实现接口方式，注解方式等</p>
+</li>
+<li><p>Handler：处理器</p>
+<p>  Handler是继DispatcherServlet前端控制器的后端控制器，在DispatcherServlet的控制下Handler对具体的用户请求进行处理<br><code>由于Handler涉及到具体的用户业务请求，所以一般情况需要程序员根据业务需求开发Handler</code></p>
+</li>
+<li><p>HandlerAdapter:处理器适配器</p>
+<p>  通过HandlerAdapter对处理器进行执行，这是适配器模式的应用，通过扩张适配器可以对更过类型的处理器进行执行</p>
+</li>
+<li><p>ViewResolver</p>
+<p>  ViewResolver负责将处理结果生成View视图，ViewResolver首先根据逻辑视图名解析成物理视图名即具体的页面地址，再生成View视图对象，最后对View进行渲染将处理结果通过页面展示给用户。springmvc框架提供了很多的View视图类型，包括jstlView、freemarkerView、pdfView等<br><code>一般情况下需要通过页面标签或页面模版技术将模型数据通过页面展示给用户，需要由程序员根据业务需求开发具体的页面</code></p>
+<h2 id="DispatcherServlet_前端控制器">DispatcherServlet 前端控制器</h2><p>DispathcerServlet作为springmvc的中央调度器存在，DispatcherServlet创建时会默认从<code>DispatcherServlet.properties</code>文件加载springmvc所用的各个组件，如果在springmvc.xml中配置了组件则以springmvc.xml中配置的为准，DispatcherServlet的存在降低了springmvc各各组件之间的耦合度。</p>
+<h2 id="HandlerMapping_处理器映射器">HandlerMapping 处理器映射器</h2><p>HandlerMapping 负责根据request请求找到对应的Handler处理器及Interceptor拦截器，将它们封装在HandlerExecutionChain 对象中给前端控制器返回。</p>
+<h2 id="HandlerAdapter_处理器适配器">HandlerAdapter 处理器适配器</h2><p>HandlerAdapter会根据适配器接口对后端控制器进行包装（适配），包装后即可对处理器进行执行，通过扩展处理器适配器可以执行多种类型的处理器，这里使用了适配器设计模式。</p>
+<h1 id="配置">配置</h1><h2 id="组件扫描器">组件扫描器</h2><p>使用组件扫描器省去在spring容器配置每个controller类的繁琐。使用<code>&lt;context:component-scan&gt;</code>自动扫描标记<code>@controller</code>的控制器类，配置如下：</p>
+  <!-- 扫描controller注解,多个包中间使用半角逗号分隔 -->
+  <context:component-scan base-package="cn.itcast.springmvc.controller.first">
+
+</context:component-scan></li>
+</ul>
+<h2 id="RequestMappingHandlerMapping">RequestMappingHandlerMapping</h2><p>注解式处理器映射器，对类中标记<code>@ResquestMapping</code>的方法进行映射，根据ResquestMapping定义的url匹配ResquestMapping标记的方法，匹配成功返回HandlerMethod对象给前端控制器，HandlerMethod对象中封装url对应的方法Method。 </p>
+<p>从spring3.1版本开始，废除了<code>DefaultAnnotationHandlerMapping</code>的使用，推荐使用<code>RequestMappingHandlerMapping</code>完成注解式处理器映射。</p>
+<p>配置如下：</p>
+<pre><code><span class="comment">&lt;!--注解映射器 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"</span>/&gt;</span>
+</code></pre><h2 id="RequestMappingHandlerAdapter">RequestMappingHandlerAdapter</h2><p>注解式处理器适配器，对标记<code>@ResquestMapping</code>的方法进行适配。</p>
+<p>从spring3.1版本开始，废除了<code>AnnotationMethodHandlerAdapter</code>的使用，推荐使用<code>RequestMappingHandlerAdapter</code>完成注解式处理器适配。</p>
+<p>配置如下：</p>
+<pre><code><span class="comment">&lt;!--注解适配器 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"</span>/&gt;</span>
+</code></pre><h2 id=""><mvc:annotation-driven></mvc:annotation-driven></h2><p>springmvc使用<code>&lt;mvc:annotation-driven&gt;</code>自动加载<code>RequestMappingHandlerMapping</code>和<code>RequestMappingHandlerAdapter</code>，可用在springmvc.xml配置文件中使用<code>&lt;mvc:annotation-driven&gt;</code>替代注解处理器和适配器的配置。</p>
+<h1 id="springmvc+mybatis整合">springmvc+mybatis整合</h1><p>表现层：springmvc -&gt; 业务层：Service接口 -&gt; 持久层：mybatis -&gt; mysql</p>
+<blockquote>
+<p>spring将各层进行整合</p>
+<blockquote>
+<ul>
+<li>通过spring管理持久层的Mapper（Dao接口）</li>
+<li>通过spring管理业务层Service，Service中可以调用Mapper接口</li>
+<li>spring进行事务控制</li>
+<li>通过spring管理表现层Handler，Handler中可以调用Service接口    </li>
+</ul>
+</blockquote>
+<p>Mapper、Service、Handler都是javabean</p>
+</blockquote>
+<ol>
+<li><p>整合dao层</p>
+<p> mybatis和spring整合，通过spring管理mapper接口。<br> 使用mapper的扫描器自动扫描mapper接口在spring中进行注册。</p>
+</li>
+<li><p>整合service层</p>
+<p> 通过spring管理 service接口。<br> 使用配置方式将service接口配置在spring配置文件中。<br> 实现事务控制。</p>
+</li>
+<li><p>整合springmvc</p>
+<p> 由于springmvc是spring的模块，不需要整合。</p>
+<h1 id="spring参数绑定过程">spring参数绑定过程</h1></li>
+</ol>
+<hr>
+<p>springmvc中，接收页面提交的数据是通过方法形参来接收，而不是在controller类定义成员变更接收！</p>
+<p>注解适配器对<code>RequestMapping</code>标记的方法进行适配，对方法中的形参会进行参数绑定，早期springmvc采用PropertyEditor（属性编辑器，只能将字符串转换成java对象）进行参数绑定将request请求的参数绑定到方法形参上，3.X之后springmvc就开始使用Converter（任意类型的转换）进行参数绑定。</p>
+<h2 id="简单类型">简单类型</h2><p>当请求的参数名称和处理器形参名称一致时会将请求参数与形参进行绑定。</p>
+<h2 id="简单pojo">简单pojo</h2><p>将pojo对象中的属性名于传递进来的属性名对应，如果传进来的参数名称和对象中的属性名称一致则将参数值设置在pojo对象中</p>
+<h3 id="自定义参数绑定实现日期类型绑定">自定义参数绑定实现日期类型绑定</h3><p>对于controller形参中pojo对象，如果属性中有日期类型，需要自定义参数绑定。<br>将请求日期数据串传成日期类型，要转换的日期类型和pojo中日期属性的类型保持一致。</p>
+<h4 id="自定义Converter">自定义Converter</h4><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomDateConverter</span> <span class="keyword">implements</span> <span class="title">Converter</span>&lt;<span class="title">String</span>, <span class="title">Date</span>&gt; </span>{
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function">Date <span class="title">convert</span><span class="params">(String source)</span> </span>{
+        <span class="keyword">try</span> {
+            SimpleDateFormat simpleDateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);
+            <span class="function"><span class="keyword">return</span> simpleDateFormat.<span class="title">parse</span><span class="params">(source)</span></span>;
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+        }
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }
+}
+</code></pre><h4 id="配置方式">配置方式</h4><p>需要向处理器适配器中注入自定义的参数绑定组件</p>
+<pre><code><span class="tag">&lt;<span class="title">mvc:annotation-driven</span> <span class="attribute">conversion-service</span>=<span class="value">"conversionService"</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">mvc:annotation-driven</span>&gt;</span>
+  <span class="comment">&lt;!-- conversionService --&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"conversionService"</span>
+        <span class="attribute">class</span>=<span class="value">"org.springframework.format.support.FormattingConversionServiceFact  oryBean"</span>&gt;</span>
+    <span class="comment">&lt;!-- 转换器 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"converters"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">list</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.ssm.controller.converter.CustomDateConverter"</span>/&gt;</span>
+        <span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+</code></pre><h2 id="包装pojo">包装pojo</h2><p>如果采用类似struts中对象.属性的方式命名，需要将pojo对象作为一个包装对象的属性，action中以该包装对象作为形参</p>
+<h1 id="post中文乱码">post中文乱码</h1><hr>
+<p>在web.xml中加入：</p>
+<pre><code><span class="variable">&lt;filter&gt;</span>
+<span class="variable">&lt;filter-name&gt;</span>CharacterEncodingFilter<span class="variable">&lt;/filter-name&gt;</span>
+<span class="variable">&lt;filter-class&gt;</span>org.springframework.web.filter.CharacterEncodingFilter
+<span class="variable">&lt;/filter-class&gt;</span>
+<span class="variable">&lt;init-param&gt;</span>
+<span class="variable">&lt;param-name&gt;</span>encoding<span class="variable">&lt;/param-name&gt;</span>
+<span class="variable">&lt;param-value&gt;</span>utf-8<span class="variable">&lt;/param-value&gt;</span>
+<span class="variable">&lt;/init-param&gt;</span>
+<span class="variable">&lt;/filter&gt;</span>
+<span class="variable">&lt;filter-mapping&gt;</span>
+<span class="variable">&lt;filter-name&gt;</span>CharacterEncodingFilter<span class="variable">&lt;/filter-name&gt;</span>
+<span class="variable">&lt;url-pattern&gt;</span>/<span class="keyword">*</span><span class="variable">&lt;/url-pattern&gt;</span>
+<span class="variable">&lt;/filter-mapping&gt;</span>
+</code></pre><p>以上可以解决post请求乱码问题。<br>对于get请求中文参数出现乱码解决方法有两个：</p>
+<p>修改tomcat配置文件添加编码与工程编码一致，如下：</p>
+<p><code>&lt;Connector URIEncoding=&quot;utf-8&quot; connectionTimeout=&quot;20000&quot; port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; redirectPort=&quot;8443&quot;/&gt;</code><br>另外一种方法对参数进行重新编码：</p>
+<p><code>String userName = new 
+String(request.getParamter(&quot;userName&quot;).getBytes(&quot;ISO8859-1&quot;),&quot;utf-8&quot;)</code><br>ISO8859-1是tomcat默认编码，需要将tomcat编码后的内容按utf-8编码</p>
+<h1 id="springmvc和struts2的区别">springmvc和struts2的区别</h1><hr>
+<ol>
+<li>springmvc的入口是一个servlet即前端控制器，而struts2入口是一个filter过虑器</li>
+<li><p>springmvc是基于方法开发(一个url对应一个方法)，请求参数传递到方法的形参；将url和controller方法映射，映射成功后springmvc生成一个Handler对象，对象中只包括了一个method，方法执行结束，形参数据销毁，可以设计为单例或多例(建议单例)</p>
+<p> struts2是基于类开发，传递参数是通过类的属性，只能设计为多例。</p>
+</li>
+<li>Struts采用值栈存储请求和响应的数据，通过OGNL存取数据， springmvc通过参数解析器是将request请求内容解析，并给方法形参赋值，将数据和视图封装成ModelAndView对象，最后又将ModelAndView中的模型数据通过reques域传输到页面。Jsp视图解析器默认使用jstl</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Study-Notes/">Study Notes</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/springmvc/">springmvc</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/06/07/springmvc-framework/" data-title="SpringMVC | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+	
+<section id="comments" class="comment">
+    <!-- ��˵���ۿ� start -->
+    <div class="ds-thread" data-thread-key="2015/06/07/springmvc-framework/" data-title="SpringMVC" data-url="http://yoursite.com/2015/06/07/springmvc-framework/"></div>
+    <!-- ��˵���ۿ� end -->
+    <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'undefined'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      <!-- ��˵����JS���� end -->
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Study-Notes/" title="Study Notes">Study Notes<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/springmvc/" title="springmvc">springmvc<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p>  不乱于心，不困于情！ <br/>
+			不畏将来，不念过往！</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2692340043" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SurperSniper" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:surpersniper1992@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="lmg">lmg</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SuperSniper"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fnull' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
