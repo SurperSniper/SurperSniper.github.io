@@ -1,10 +1,10 @@
 
-  <!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   
-    <title>分类 : Study Notes | Zzzz</title>
+    <title>search | Zzzz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="lmg">
@@ -13,12 +13,13 @@
     
     <meta name="description" content="ѧϰ�ĵ� ˼������ ֪ʶ����">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Zzzz">
-<meta property="og:url" content="http://yoursite.com/categories/Study-Notes/index.html">
+<meta property="og:title" content="search">
+<meta property="og:url" content="http://yoursite.com/search/index.html">
 <meta property="og:site_name" content="Zzzz">
 <meta property="og:description" content="ѧϰ�ĵ� ˼������ ֪ʶ����">
+<meta property="og:updated_time" content="2015-06-10T07:00:21.588Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Zzzz">
+<meta name="twitter:title" content="search">
 <meta name="twitter:description" content="ѧϰ�ĵ� ˼������ ֪ʶ����">
 
     
@@ -73,30 +74,25 @@
       </header>
       <div id="container">
         
-
-<div class="archive-title" >
-  <h2 class="category-icon">Study Notes</h2>
-  
+<div  id="main" class="page">
+  <div id='cse' style='width:100%;text-align:center'>正在加载搜索结果，请稍等。</div>
 </div>
-<div id="main" class="archive-part clearfix">
-  <div id="archive-page">
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/06/07/springmvc-framework/" title="SpringMVC" itemprop="url">
-  
-
-    <time datetime="2015-06-07T12:52:58.000Z" itemprop="datePublished">2015-06-07</time>
-
-
-    <h1 itemprop="name">SpringMVC</h1>
-
-  </a>
-</section>
-
-
-  </div>
-</div>
+<script src="http://www.google.com.hk/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+google.load('search', '1', {language : 'zh-CN',style: google.loader.themes.MINIMALIST});
+google.setOnLoadCallback(function(){
+  var customSearchControl = new google.search.CustomSearchControl('012912240816765946227:rq5eyfx5-kq');
+  customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+  var options = new google.search.DrawOptions();
+  options.setAutoComplete(true);
+  customSearchControl.draw('cse', options);
+  var match = location.search.match(/q=([^&]*)(&|$)/);
+  if(match && match[1]){
+    var search = decodeURIComponent(match[1]); 
+    customSearchControl.execute(search);
+  }
+},true);
+</script>
 
       </div>
       <footer><div id="footer" >
