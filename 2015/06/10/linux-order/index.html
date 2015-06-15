@@ -1,0 +1,739 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux 常用命令 | Zzzz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="lmg">
+    
+
+    
+    <meta name="description" content="常用命令使用Man命令了解某命令的详细信息： # man ls
+
+注：在Linux中命令是区分大小写的，如Ls和ls是不一样的
+
+pwd命令pwd:print working directory(打印工作目录)。当你输入pwd时，请求Linux系统显示你的当前位置。
+cd命令cd命令来改变工作目录
+
+
+cd ~:把你送回到你的登录目录
+cd /:把你带到整个系统的根目录
+cd /root:带到根用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 常用命令">
+<meta property="og:url" content="http://yoursite.com/2015/06/10/linux-order/index.html">
+<meta property="og:site_name" content="Zzzz">
+<meta property="og:description" content="常用命令使用Man命令了解某命令的详细信息： # man ls
+
+注：在Linux中命令是区分大小写的，如Ls和ls是不一样的
+
+pwd命令pwd:print working directory(打印工作目录)。当你输入pwd时，请求Linux系统显示你的当前位置。
+cd命令cd命令来改变工作目录
+
+
+cd ~:把你送回到你的登录目录
+cd /:把你带到整个系统的根目录
+cd /root:带到根用">
+<meta property="og:updated_time" content="2015-06-15T03:11:31.615Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 常用命令">
+<meta name="twitter:description" content="常用命令使用Man命令了解某命令的详细信息： # man ls
+
+注：在Linux中命令是区分大小写的，如Ls和ls是不一样的
+
+pwd命令pwd:print working directory(打印工作目录)。当你输入pwd时，请求Linux系统显示你的当前位置。
+cd命令cd命令来改变工作目录
+
+
+cd ~:把你送回到你的登录目录
+cd /:把你带到整个系统的根目录
+cd /root:带到根用">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zzzz" title="Zzzz"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zzzz">Zzzz</a></h1>
+				<h2 class="blog-motto">Do your best under limited conditions</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/10/linux-order/" title="Linux 常用命令" itemprop="url">Linux 常用命令</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-10T12:49:47.000Z" itemprop="datePublished"> 发表于 2015-06-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常用命令"><span class="toc-number">1.</span> <span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#pwd命令"><span class="toc-number">1.0.1.</span> <span class="toc-text">pwd命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cd命令"><span class="toc-number">1.0.2.</span> <span class="toc-text">cd命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ls命令"><span class="toc-number">1.0.3.</span> <span class="toc-text">ls命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#locate命令"><span class="toc-number">1.0.4.</span> <span class="toc-text">locate命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#clear命令"><span class="toc-number">1.0.5.</span> <span class="toc-text">clear命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cat命令"><span class="toc-number">1.0.6.</span> <span class="toc-text">cat命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#head命令"><span class="toc-number">1.0.7.</span> <span class="toc-text">head命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tail命令"><span class="toc-number">1.0.8.</span> <span class="toc-text">tail命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#grep命令"><span class="toc-number">1.0.9.</span> <span class="toc-text">grep命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#chmod命令"><span class="toc-number">1.0.10.</span> <span class="toc-text">chmod命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cp命令"><span class="toc-number">1.0.11.</span> <span class="toc-text">cp命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mv命令"><span class="toc-number">1.0.12.</span> <span class="toc-text">mv命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mkdir命令"><span class="toc-number">1.0.13.</span> <span class="toc-text">mkdir命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rm_命令"><span class="toc-number">1.0.14.</span> <span class="toc-text">rm 命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件压缩和有关归档命令"><span class="toc-number">2.</span> <span class="toc-text">文件压缩和有关归档命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#与系统管理相关的命令"><span class="toc-number">3.</span> <span class="toc-text">与系统管理相关的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户管理命令"><span class="toc-number">4.</span> <span class="toc-text">用户管理命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关命令_1"><span class="toc-number">5.</span> <span class="toc-text">相关命令 1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关命令_2"><span class="toc-number">6.</span> <span class="toc-text">相关命令 2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程管理命令"><span class="toc-number">7.</span> <span class="toc-text">进程管理命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#防火墙命令"><span class="toc-number">8.</span> <span class="toc-text">防火墙命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#禁用SElinux"><span class="toc-number">9.</span> <span class="toc-text">禁用SElinux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置静态ip"><span class="toc-number">10.</span> <span class="toc-text">设置静态ip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置主机名"><span class="toc-number">11.</span> <span class="toc-text">设置主机名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ip与HostName绑定"><span class="toc-number">12.</span> <span class="toc-text">ip与HostName绑定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK配置"><span class="toc-number">13.</span> <span class="toc-text">JDK配置</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="常用命令">常用命令</h2><p>使用Man命令了解某命令的详细信息：<br> <code># man ls</code></p>
+<blockquote>
+<p>注：在Linux中命令是区分大小写的，如Ls和ls是不一样的</p>
+</blockquote>
+<h4 id="pwd命令">pwd命令</h4><p>pwd:print working directory(打印工作目录)。当你输入<code>pwd</code>时，请求Linux系统显示你的当前位置。</p>
+<h4 id="cd命令">cd命令</h4><p>cd命令来改变工作目录</p>
+<blockquote>
+<ul>
+<li><code>cd ~</code>:把你送回到你的登录目录</li>
+<li><code>cd /</code>:把你带到整个系统的根目录</li>
+<li><code>cd /root</code>:带到根用户的主目录，你必须是根用户，必须是根用户才能访问该目录</li>
+<li><code>cd /home</code>:带到home目录，用户的登录目录通常贮存在此处</li>
+<li><code>cd ..</code>:向上移动以及目录</li>
+<li><code>cd /dir/subdirfoo</code>:无论你在哪一个目录，这个绝对路径都会把你直接带到subdirfoo中，即dir1的子目录</li>
+<li><code>cd ../../dir3/dir2</code>:这个相对路径会把你向上移动两级，转换到根目录，然后转到dir3，然后转到dir2目录中去</li>
+</ul>
+</blockquote>
+<h4 id="ls命令">ls命令</h4><p>使用 ls 命令就可以显示你的当前目录的内容</p>
+<blockquote>
+<ul>
+<li>-a — 全部（all）。列举目录中的全部文件，包括隐藏文件（.filename）。位于这个列表的起首处的 .. 和 . 依<br>次是指父目录和你的当前目录。</li>
+<li>-l — 长（long）。列举目录内容的细节，包括权限（模式）、所有者、组群、大小、创建日期、文件是否是到<br>系统其它地方的链接，以及链接的指向。</li>
+<li>-F — 文件类型（File type）。在每一个列举项目之后添加一个符号。这些符号包括：/ 表明是一个目录；@ 表<br>明是到其它文件的符号链接；* 表明是一个可执行文件。</li>
+<li>-r — 逆向（reverse）。从后向前地列举目录中的内容。</li>
+<li>-R — 递归（recursive）。该选项递归地列举所有目录（在当前目录之下）的内容。</li>
+<li>-S — 大小（size）。按文件大小排序 </li>
+</ul>
+</blockquote>
+<h4 id="locate命令">locate命令</h4><p>使用 locate 命令，你将会看到每一个包括搜寻条件的目录或文件。譬如，如果你想搜寻所有名称中带有 finger<br>这个词的文件，键入：<br><code>locate finger</code></p>
+<p>locate 命令使用数据库来定位文件或目录名中带有 finger 这个词的文件和目录。这个搜寻结果可能会包括一个<br>叫做 finger.txt 的文件，一个叫做 pointerfinger.txt 的文件，一个被命名为 fingerthumbnails 的目录，诸如此类</p>
+<h4 id="clear命令">clear命令</h4><p>clear命令用于清除终端窗口</p>
+<h4 id="cat命令">cat命令</h4><p>cat是concatenate（连锁）的简写，意思是合并文件。该命令可以显示文件的内容（经常和more搭配使用），或者是将多个文件合并为一个文件。</p>
+<h4 id="head命令">head命令</h4><p>使用head命令来查看文件的开头部分：<code>head &lt;filename&gt;</code></p>
+<p>head命令按照默认设置，你只能阅读文件的前十行。你可以通过指定一个数字选项来改变要显示的行数：<code>head -20 &lt;filename&gt;</code></p>
+<h4 id="tail命令">tail命令</h4><p>与head命令恰恰相反，查看文件结尾的十行。这有助于查看日志文件的<br>最后十行来阅读重要的系统消息。你还可以使用 tail 来观察日志文件被更新的过程。使用 -f 选项，tail 会自动<br>实时地把打开文件中的新消息显示到屏幕上。例如，要即时观察 /var/log/messages的变化，以根用户身份在<br>shell 提示下键入以下命令：<br><code>tail -f /var/log/messages</code></p>
+<h4 id="grep命令">grep命令</h4><p>grep 命令对于在文件中查找指定的字串很有用途。例如，如果你想在 sneakers.txt 文件中查找每一个提到“<br>coffee”的地方，你可以键入：<br><code>grep coffee sneakers.txt</code><br>你就会看到文件中带有“coffee”的每一行。</p>
+<h4 id="chmod命令">chmod命令</h4><p>chmod命令用于改变文件或目录的访问权限。</p>
+<p>-(rw-)(rw-)(r—)</p>
+<p>类型所有者 组群 其他人</p>
+<blockquote>
+<ul>
+<li>d — 目录</li>
+<li>-（短线）— 常规文件（而不是目录或链接）</li>
+<li><p>l — 到系统上其它位置的另一个程序或文件的符号链接</p>
+<p>  后三组中，你可以看到下面几种类型：</p>
+</li>
+<li><p>r — 文件可以被读取</p>
+</li>
+<li>w — 文件可以被写入</li>
+<li>x — 文件可以被执行（如果它是程序的话）</li>
+</ul>
+<p>接下来我们用chmod来改变文件的权限，键入下面的命令：<br><code>chmod o+w sneakers.txt</code></p>
+</blockquote>
+<p>下面是一个速记符号含义的列表：</p>
+<pre><code>身份
+</code></pre><blockquote>
+<ul>
+<li>u — 拥有文件的用户（所有者）</li>
+<li>g — 所有者所在的组群</li>
+<li>o — 其他人（不是所有者或所有者的组群）</li>
+<li>a — 每个人或全部（u、g、和 o）</li>
+</ul>
+</blockquote>
+<pre><code>权限
+</code></pre><blockquote>
+<ul>
+<li>r — 读取权</li>
+<li>w — 写入权</li>
+<li>x — 执行权</li>
+</ul>
+</blockquote>
+<pre><code>行动
+</code></pre><blockquote>
+<ul>
+<li>+ — 添加权限</li>
+<li>— —  删除权限</li>
+<li>= — 使它成为唯一权限</li>
+</ul>
+</blockquote>
+<pre><code>每种权限设置都可以用一个数值来代表：
+</code></pre><blockquote>
+<ul>
+<li>r = 4</li>
+<li>w = 2</li>
+<li>x = 1</li>
+<li>- = 0</li>
+</ul>
+</blockquote>
+<p><code>chmod 644 sneakers.txt</code></p>
+<h4 id="cp命令">cp命令</h4><p>cp(copy)命令可以将文件或目录复制到其他目录中，就如同DOS下的copy命令一样，功能非常强大。在使用cp<br>命令时，只需要指定源文件名与目标文件名或目标目录即可。格式：<br><code>cp &lt;源&gt; &lt;目标&gt;</code></p>
+<h4 id="mv命令">mv命令</h4><p>要移动文件，使用 mv 命令。mv 的常见选项包括：</p>
+<blockquote>
+<ul>
+<li>-i — 互动。如果你选择的文件会覆盖目标中的现存文件，它会提示你。这是一个实用的选项，因为它象 cp 中<br>的 -i 选项一样，会给你一个确认替换已存文件的机会。</li>
+<li>-f — 强制。它会超越互动模式，不提示地移动文件。除非你知道自己在干什么，这个选项很危险。在你对系统<br>信心十足之前，请谨慎使用这个选项。</li>
+<li>-v — 详细。显示文件的移动进度。<br>如果你想把文件从你的主目录中移到另一个现存的目录中，键入以下命令（你需要位于你的主目录内）：<br><code>mv sneakers.txt tigger</code></li>
+</ul>
+</blockquote>
+<h4 id="mkdir命令">mkdir命令</h4><p>mkdir(make directory)命令用来建立目录。例如在系统中建立datal 子目录：<br><code>[root@teacher tmp]#mkdir datal</code></p>
+<h4 id="rm_命令">rm 命令</h4><p>在Liunx中创建文件是很容易，这样系统中随时会有过时或无用的文件，用户可以用rm命令将其删除。该命令<br>可以删除目录中的文件或目录本身，对于链接文件，只是删除了该链接，原有文件保持不变。删除文件和目录<br>的选项包括：</p>
+<blockquote>
+<ul>
+<li>-i — 互动。提示你确认删除。这个选项可以帮助你避免误删文件。</li>
+<li>-f — 强制。代替互动模式，不提示地删除文件。除非你知道自己在干什么，使用这个选项通常不是明智之举。</li>
+<li>-v — 详细。显示文件的删除进度。</li>
+<li>-r — 递归。将会删除某个目录及其中所有的文件和子目录。<br>要使用 rm 命令来删除文件 piglet.txt，键入：<br><code>rm piglet.txt</code><br>另一个比使用 rm 更安全的删除目录的命令是 rmdir 命令。这个命令不允许你使用递归删除，因此不能删除包<br>含文件的目录。</li>
+</ul>
+</blockquote>
+<h2 id="文件压缩和有关归档命令">文件压缩和有关归档命令</h2><blockquote>
+<ul>
+<li><p>compress，uncompress</p>
+<p>此命令用于压缩或解压缩数据。</p>
+</li>
+<li><p>gzip，gunzip</p>
+<p>此命令用于压缩或解压缩文件，其中gzip是在Linux系统中经常使用的压缩和解压缩命令，很好用。</p>
+</li>
+<li><p>rpm</p>
+<p>rpm命令用于启动RPM软件包管理操作。</p>
+</li>
+<li><p>tar</p>
+<p>tar命令用于启动文件打包程序。</p>
+</li>
+<li><p>unzip</p>
+<p>该命令用于解压缩扩展名为.zip的文件，即可以在Linux下解压Windows中用Winzip压缩的文件。</p>
+</li>
+<li><p>zip</p>
+<p>zip命令用于打包和压缩文件。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="与系统管理相关的命令">与系统管理相关的命令</h2><p>1.free</p>
+<blockquote>
+<p>该命令用于查看当前系统内存的使用情况，它可以显示系统中剩余及已用的物理内存、交换内存、共享内存和内核缓冲区。</p>
+</blockquote>
+<p>2.shutdown</p>
+<blockquote>
+<p>该命令用于关机或进入单人维护模式。</p>
+</blockquote>
+<p>3.data</p>
+<blockquote>
+<p>data命令可以显示当前系统的日期和时间。clock命令也可以用于显示系统当前的日期与时间（默认情况下，普通用户无法执行clock命令，必须用root帐号登录执行）</p>
+</blockquote>
+<p>4.write</p>
+<blockquote>
+<p>该命令用来向系统中的某一个用户发送消息。用户如果想退出信息发送状态，按组合键Ctrl+C即可</p>
+</blockquote>
+<h2 id="用户管理命令">用户管理命令</h2><p>1.groupadd</p>
+<blockquote>
+<p>该命令用于创建新的用户组。</p>
+</blockquote>
+<p>2.groupmod</p>
+<blockquote>
+<p>该命令用于修改组的属性。</p>
+</blockquote>
+<p>3.groups</p>
+<blockquote>
+<p>该命令用于显示当前用户所在的组。</p>
+</blockquote>
+<p>4.passwd</p>
+<blockquote>
+<p>passwd(password)命令可让用户修改帐户的 密码。一般来说，设置帐户密码失败有几种情况：密码太简单、密码太短、密码中的字符多数相同。</p>
+</blockquote>
+<p>5.su</p>
+<blockquote>
+<p>这个命令非常重要，它可以使一个一般用户拥有超级用户或其他用户的权限，也可以使超级用户以一般用户的身份做些事情。但一般用户使用该命令时必须有超级用户或其他用户的口令。如果要退出当前用户的登录，可以输入exit。</p>
+</blockquote>
+<p>6.useradd</p>
+<blockquote>
+<p>该命令是建立用户帐号最快最简单的方法。</p>
+</blockquote>
+<p>7.userdel</p>
+<blockquote>
+<p>该命令用来删除用户帐号及其相关文件。</p>
+</blockquote>
+<p>8.who</p>
+<blockquote>
+<p>该命令可以查看当前计算机有哪些用户登录，例如：</p>
+</blockquote>
+<pre><code>[<span class="literal">root</span>@teacher <span class="literal">root</span>]$ who
+ <span class="literal">root</span> :<span class="number">0</span> <span class="constant">Jun</span>23 08:<span class="number">22</span>
+ <span class="literal">root</span> pts/<span class="number">0</span> <span class="constant">Jun</span>23 08:<span class="number">53</span> (:<span class="number">0</span>.<span class="number">0</span>)- show who is logged on
+</code></pre><p>9.whoami</p>
+<blockquote>
+<p>该命令是用来查看当前用户的登录名。例如：</p>
+</blockquote>
+<pre><code>[<span class="literal">root</span>@teacher <span class="literal">root</span>]$ whoami
+<span class="literal">root</span>
+</code></pre><h2 id="相关命令_1">相关命令 1</h2><p>ftp</p>
+<blockquote>
+<p>该命令是标准的文件传输协议的用户接口，是在TCP/IP网络上传输文件最简单有效的方法。</p>
+</blockquote>
+<p>host</p>
+<blockquote>
+<p>该命令用于DNS查询。</p>
+</blockquote>
+<p>hostname</p>
+<blockquote>
+<p>该命令用于显示或设置系统的主机名。</p>
+</blockquote>
+<p>mail</p>
+<blockquote>
+<p>mail命令用来发送和接收邮件。</p>
+</blockquote>
+<p>netstat</p>
+<blockquote>
+<p>该命令用于显示网络连接、路由表和网络接口信息，用户可以知道目前有哪些网络连接正在运行。一般常用的<br>参数有：</p>
+<p>-a: 显示所有socket，包括正在监听的。</p>
+<p>-c: 每隔1秒钟就重新显示一遍网络信息，直到用户中断它。</p>
+<p>-I：显示所有网络接口的信息，格式同“ifconfig-e”命令。</p>
+<p>-n: 以IP地址代替名称，显示网络连接信息。</p>
+<p>-r: 显示核心路由表，格式同“route-e”命令。</p>
+<p>-t: 显示TCP协议的连接信息。</p>
+<p>-u: 显示UDP协议的连接信息。</p>
+<p>-v: 显示正在进行的网络协议。</p>
+</blockquote>
+<p>ping</p>
+<blockquote>
+<p>该命令可用来测试计算机和网络上的其他计算机是否连通.</p>
+</blockquote>
+<h2 id="相关命令_2">相关命令 2</h2><p>rsh</p>
+<blockquote>
+<p>rsh(remote shell) 命令是远程shell命令.该命令在指定的远程主机上启动一个shell并执行rsh命令，如果rsh没有<br>指定具体命令，就启用rlogin命令登录到远程主机上。</p>
+</blockquote>
+<p>telnet</p>
+<blockquote>
+<p>telnet 命令用于通过网络登录远程计算机，如同操作本地计算机一样。<br>　<br>wget<br>Wget命令用于Linux环境下从WWW上下载文件，支持HTTP和FTP协议，支持代理服务器和断点续传功能，能<br>够自动递归远程主机的目录，查找合乎要求的文件并下载到本地硬盘上，Wget命令可在后台运行，截获并忽略HANGUP信号，因此在用户退出登录之后，仍可继续运行。</p>
+</blockquote>
+<h2 id="进程管理命令">进程管理命令</h2><p>kill</p>
+<blockquote>
+<p>该命令用于终止一个程序。例如:</p>
+</blockquote>
+<pre><code>[root<span class="annotation">@teacherroot</span>]# kill <span class="number">3793</span>
+<span class="string">Base:</span> <span class="string">kill:</span>(<span class="number">3793</span>)- 没有那个进程
+</code></pre><h2 id="防火墙命令">防火墙命令</h2><ul>
+<li><code>service iptables status</code>查看防火墙状态</li>
+<li><code>service iptables stop</code>暂时关闭防火墙</li>
+<li><code>chkconfig iptables off</code>永久关闭防火墙</li>
+</ul>
+<h2 id="禁用SElinux">禁用SElinux</h2><ul>
+<li>vi /etc/sysconfig/selinux 设置SELINUX=disabled</li>
+</ul>
+<h2 id="设置静态ip">设置静态ip</h2><ul>
+<li>vi /etc/sysconfig/network-scripts/ifcfg-eth0</li>
+</ul>
+<h2 id="设置主机名">设置主机名</h2><ul>
+<li>hostname 查看主机名 </li>
+<li>vi /etc/sysconfig/network</li>
+</ul>
+<h2 id="ip与HostName绑定">ip与HostName绑定</h2><ul>
+<li>vi /etc/hosts</li>
+</ul>
+<h2 id="JDK配置">JDK配置</h2><p>chmod u+x jdk-6u45-linux-x64.bin<br>bin目录下执行：<code>./jdk-6u45-linux-x64.bin</code></p>
+<ul>
+<li>vi /etc/profile</li>
+<li>source /etc/profile</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Study-Notes/">Study Notes</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/06/10/linux-order/" data-title="Linux 常用命令 | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/06/14/hadoop-info/" title="hadoop 2.x 基础">
+  <strong>上一篇：</strong><br/>
+  <span>
+  hadoop 2.x 基础</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/06/09/think-in-java-note-01/"  title="垃圾收集">
+ <strong>下一篇：</strong><br/> 
+ <span>垃圾收集
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+    <!-- ��˵���ۿ� start -->
+    <div class="ds-thread" data-thread-key="2015/06/10/linux-order/" data-title="Linux 常用命令" data-url="http://yoursite.com/2015/06/10/linux-order/"></div>
+    <!-- ��˵���ۿ� end -->
+    <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'undefined'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      <!-- ��˵����JS���� end -->
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Study-Notes/" title="Study Notes">Study Notes<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HashMap/" title="HashMap">HashMap<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/springmvc/" title="springmvc">springmvc<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p>  不乱于心，不困于情！ <br/>
+			不畏将来，不念过往！</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2692340043" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SurperSniper" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:surpersniper1992@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="lmg">lmg</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SuperSniper"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fnull' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

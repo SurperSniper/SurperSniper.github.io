@@ -1,0 +1,593 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HashMap | Zzzz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="lmg">
+    
+
+    
+    <meta name="description" content="HashMap 和 HashSet 是 Java Collection Framework 的两个重要成员，其中 HashMap 是 Map 接口的常用实现类，HashSet 是 Set 接口的常用实现类。虽然 HashMap 和 HashSet 实现的接口规范不同，但它们底层的 Hash 存储机制完全一样，甚至 HashSet 本身就采用 HashMap 来实现的。 
+Hash 存储机制实际上，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashMap">
+<meta property="og:url" content="http://yoursite.com/2015/06/15/HashMap/index.html">
+<meta property="og:site_name" content="Zzzz">
+<meta property="og:description" content="HashMap 和 HashSet 是 Java Collection Framework 的两个重要成员，其中 HashMap 是 Map 接口的常用实现类，HashSet 是 Set 接口的常用实现类。虽然 HashMap 和 HashSet 实现的接口规范不同，但它们底层的 Hash 存储机制完全一样，甚至 HashSet 本身就采用 HashMap 来实现的。 
+Hash 存储机制实际上，">
+<meta property="og:updated_time" content="2015-06-15T02:46:58.214Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HashMap">
+<meta name="twitter:description" content="HashMap 和 HashSet 是 Java Collection Framework 的两个重要成员，其中 HashMap 是 Map 接口的常用实现类，HashSet 是 Set 接口的常用实现类。虽然 HashMap 和 HashSet 实现的接口规范不同，但它们底层的 Hash 存储机制完全一样，甚至 HashSet 本身就采用 HashMap 来实现的。 
+Hash 存储机制实际上，">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zzzz" title="Zzzz"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zzzz">Zzzz</a></h1>
+				<h2 class="blog-motto">Do your best under limited conditions</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/15/HashMap/" title="HashMap" itemprop="url">HashMap</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-15T02:36:35.000Z" itemprop="datePublished"> 发表于 2015-06-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hash_存储机制"><span class="toc-number">1.</span> <span class="toc-text">Hash 存储机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#集合和引用"><span class="toc-number">1.1.</span> <span class="toc-text">集合和引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HashMap_的存储实现"><span class="toc-number">1.2.</span> <span class="toc-text">HashMap 的存储实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash_算法的性能选项"><span class="toc-number">1.3.</span> <span class="toc-text">Hash 算法的性能选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HashMap_的读取实现"><span class="toc-number">1.4.</span> <span class="toc-text">HashMap 的读取实现</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>HashMap 和 HashSet 是 Java Collection Framework 的两个重要成员，其中 HashMap 是 Map 接口的常用实现类，HashSet 是 Set 接口的常用实现类。虽然 HashMap 和 HashSet 实现的接口规范不同，但它们底层的 Hash 存储机制完全一样，甚至 HashSet 本身就采用 HashMap 来实现的。 </p>
+<h1 id="Hash_存储机制">Hash 存储机制</h1><p>实际上，HashSet 和 HashMap 之间有很多相似之处，对于 HashSet 而言，系统采用 Hash 算法决定集合元素的存储位置，这样可以保证能快速存、取集合元素；对于 HashMap 而言，系统 key-value 当成一个整体进行处理，系统总是根据 Hash 算法来计算 key-value 的存储位置，这样可以保证能快速存、取 Map 的 key-value 对。</p>
+<p>在介绍集合存储之前需要指出一点：虽然集合号称存储的是 Java 对象，但实际上并不会真正将 Java 对象放入 Set 集合中，只是在 Set 集合中保留这些对象的引用而言。也就是说：Java 集合实际上是多个引用变量所组成的集合，这些引用变量指向实际的 Java 对象。 </p>
+<h2 id="集合和引用">集合和引用</h2><p>就像引用类型的数组一样，当我们把 Java 对象放入数组之时，并不是真正的把 Java 对象放入数组中，只是把对象的引用放入数组中，每个数组元素都是一个引用变量。 </p>
+<h2 id="HashMap_的存储实现">HashMap 的存储实现</h2><p>当程序试图将多个 key-value 放入 HashMap 中时，以如下代码片段为例：</p>
+<pre><code><span class="keyword">HashMap</span>&lt;<span class="keyword">String</span> , Double&gt; <span class="built_in">map</span> = <span class="keyword">new</span> <span class="keyword">HashMap</span>&lt;<span class="keyword">String</span> , Double&gt;();   
+<span class="built_in">map</span>.put(<span class="string">"语文"</span> , <span class="number">80.0</span>);   
+<span class="built_in">map</span>.put(<span class="string">"数学"</span> , <span class="number">89.0</span>);   
+<span class="built_in">map</span>.put(<span class="string">"英语"</span> , <span class="number">78.2</span>); 
+</code></pre><p>HashMap 采用一种所谓的“Hash 算法”来决定每个元素的存储位置。 </p>
+<p>当程序执行 map.put(“语文” , 80.0); 时，系统将调用”语文”的 hashCode() 方法得到其 hashCode 值——每个 Java 对象都有 hashCode() 方法，都可通过该方法获得它的 hashCode 值。得到这个对象的 hashCode 值之后，系统会根据该 hashCode 值来决定该元素的存储位置。 </p>
+<p>我们可以看 HashMap 类的 put(K key , V value) 方法的源代码： </p>
+<pre><code><span class="keyword">public</span> V put(K <span class="variable">key</span>, V value)   
+{   
+ <span class="comment">// 如果 key 为 null，调用 putForNullKey 方法进行处理  </span>
+ <span class="keyword">if</span> (<span class="variable">key</span> == <span class="keyword">null</span>)   
+     <span class="keyword">return</span> putForNullKey(value);   
+ <span class="comment">// 根据 key 的 keyCode 计算 Hash 值  </span>
+ <span class="built_in">int</span> hash = hash(<span class="variable">key</span>.hashCode());   
+ <span class="comment">// 搜索指定 hash 值在对应 table 中的索引  </span>
+     <span class="built_in">int</span> i = indexFor(hash, table.length);  
+ <span class="comment">// 如果 i 索引处的 Entry 不为 null，通过循环不断遍历 e 元素的下一个元素  </span>
+ <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[i]; e != <span class="keyword">null</span>; e = e.next)   
+ {   
+     <span class="keyword">Object</span> k;   
+     <span class="comment">// 找到指定 key 与需要放入的 key 相等（hash 值相同  </span>
+     <span class="comment">// 通过 equals 比较放回 true）  </span>
+     <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.<span class="variable">key</span>) == <span class="variable">key</span>   
+         || <span class="variable">key</span>.equals(k)))   
+     {   
+         V oldValue = e.value;   
+         e.value = value;   
+         e.recordAccess(<span class="keyword">this</span>);   
+         <span class="keyword">return</span> oldValue;   
+     }   
+ }   
+ <span class="comment">// 如果 i 索引处的 Entry 为 null，表明此处还没有 Entry   </span>
+ modCount++;   
+ <span class="comment">// 将 key、value 添加到 i 索引处  </span>
+ addEntry(hash, <span class="variable">key</span>, value, i);   
+ <span class="keyword">return</span> <span class="keyword">null</span>;   
+}   
+</code></pre><p>上面程序中用到了一个重要的内部接口：Map.Entry，每个 Map.Entry 其实就是一个 key-value 对。从上面程序中可以看出：当系统决定存储 HashMap 中的 key-value 对时，完全没有考虑 Entry 中的 value，仅仅只是根据 key 来计算并决定每个 Entry 的存储位置。这也说明了前面的结论：我们完全可以把 Map 集合中的 value 当成 key 的附属，当系统决定了 key 的存储位置之后，value 随之保存在那里即可。 </p>
+<p>上面方法提供了一个根据 hashCode() 返回值来计算 Hash 码的方法：hash()，这个方法是一个纯粹的数学计算，其方法如下： </p>
+<pre><code>static int hash(int <span class="keyword">h</span>)   
+{   
+    <span class="keyword">h</span> ^= (<span class="keyword">h</span> &gt;&gt;&gt; 20) ^ (<span class="keyword">h</span> &gt;&gt;&gt; 12);   
+    <span class="keyword">return</span> <span class="keyword">h</span> ^ (<span class="keyword">h</span> &gt;&gt;&gt; 7) ^ (<span class="keyword">h</span> &gt;&gt;&gt; 4);   
+}  
+</code></pre><p>对于任意给定的对象，只要它的 hashCode() 返回值相同，那么程序调用 hash(int h) 方法所计算得到的 Hash 码值总是相同的。接下来程序会调用 indexFor(int h, int length) 方法来计算该对象应该保存在 table 数组的哪个索引处。indexFor(int h, int length) 方法的代码如下： </p>
+<pre><code><span class="keyword">static</span> <span class="function"><span class="keyword">int</span> <span class="title">indexFor</span><span class="params">(<span class="keyword">int</span> h, <span class="keyword">int</span> length)</span>   
+</span>{   
+    <span class="keyword">return</span> h &amp; (length-<span class="number">1</span>);   
+} 
+</code></pre><p>这个方法非常巧妙，它总是通过 h &amp;(table.length -1) 来得到该对象的保存位置——而 HashMap 底层数组的长度总是 2 的 n 次方，这一点可参看后面关于 HashMap 构造器的介绍。 </p>
+<p>当 length 总是 2 的倍数时，h &amp; (length-1) 将是一个非常巧妙的设计：假设 h=5,length=16, 那么 h &amp; length - 1 将得到 5；如果 h=6,length=16, 那么 h &amp; length - 1 将得到 6 ……如果 h=15,length=16, 那么 h &amp; length - 1 将得到 15；但是当 h=16 时 , length=16 时，那么 h &amp; length - 1 将得到 0 了；当 h=17 时 , length=16 时，那么 h &amp; length - 1 将得到 1 了……这样保证计算得到的索引值总是位于 table 数组的索引之内。 </p>
+<p>根据上面 put 方法的源代码可以看出，当程序试图将一个 key-value 对放入 HashMap 中时，程序首先根据该 key 的 hashCode() 返回值决定该 Entry 的存储位置：如果两个 Entry 的 key 的 hashCode() 返回值相同，那它们的存储位置相同。如果这两个 Entry 的 key 通过 equals 比较返回 true，新添加 Entry 的 value 将覆盖集合中原有 Entry 的 value，但 key 不会覆盖。如果这两个 Entry 的 key 通过 equals 比较返回 false，新添加的 Entry 将与集合中原有 Entry 形成 Entry 链，而且新添加的 Entry 位于 Entry 链的头部——具体说明继续看 addEntry() 方法的说明。 </p>
+<p>当向 HashMap 中添加 key-value 对，由其 key 的 hashCode() 返回值决定该 key-value 对（就是 Entry 对象）的存储位置。当两个 Entry 对象的 key 的 hashCode() 返回值相同时，将由 key 通过 eqauls() 比较值决定是采用覆盖行为（返回 true），还是产生 Entry 链（返回 false）。 </p>
+<p>上面程序中还调用了 addEntry(hash, key, value, i); 代码，其中 addEntry 是 HashMap 提供的一个包访问权限的方法，该方法仅用于添加一个 key-value 对。下面是该方法的代码： </p>
+<pre><code><span class="label">void</span> <span class="keyword">addEntry(int </span>hash, K key, V value, int <span class="keyword">bucketIndex) </span>  
+{   
+    // 获取指定 <span class="keyword">bucketIndex </span>索引处的 <span class="preprocessor">Entry</span>   
+    <span class="preprocessor">Entry</span>&lt;K,V&gt; e = table[<span class="keyword">bucketIndex]; </span>    // ①  
+    // 将新创建的 <span class="preprocessor">Entry</span> 放入 <span class="keyword">bucketIndex </span>索引处，并让新的 <span class="preprocessor">Entry</span> 指向原来的 <span class="preprocessor">Entry</span>   
+    table[<span class="keyword">bucketIndex] </span>= new <span class="preprocessor">Entry</span>&lt;K,V&gt;(hash, key, value, e)<span class="comment">;   </span>
+    // 如果 <span class="preprocessor">Map</span> 中的 key-value 对的数量超过了极限  
+    <span class="preprocessor">if</span> (size++ &gt;= threshold)   
+        // 把 table 对象的长度扩充到 <span class="number">2</span> 倍。  
+        resize(<span class="number">2</span> * table.length)<span class="comment">;    // ②  </span>
+}   
+</code></pre><p>上面方法的代码很简单，但其中包含了一个非常优雅的设计：系统总是将新添加的 Entry 对象放入 table 数组的 bucketIndex 索引处——如果 bucketIndex 索引处已经有了一个 Entry 对象，那新添加的 Entry 对象指向原有的 Entry 对象（产生一个 Entry 链），如果 bucketIndex 索引处没有 Entry 对象，也就是上面程序①号代码的 e 变量是 null，也就是新放入的 Entry 对象指向 null，也就是没有产生 Entry 链。 </p>
+<h2 id="Hash_算法的性能选项">Hash 算法的性能选项</h2><p>根据上面代码可以看出，在同一个 bucket 存储 Entry 链的情况下，新放入的 Entry 总是位于 bucket 中，而最早放入该 bucket 中的 Entry 则位于这个 Entry 链的最末端。 </p>
+<p>上面程序中还有这样两个变量： </p>
+<blockquote>
+<ul>
+<li>size：该变量保存了该 HashMap 中所包含的 key-value 对的数量。 </li>
+<li>threshold：该变量包含了 HashMap 能容纳的 key-value 对的极限，它的值等于 HashMap 的容量乘以负载因子（load factor）。 </li>
+</ul>
+</blockquote>
+<p>从上面程序中②号代码可以看出，当 size++ &gt;= threshold 时，HashMap 会自动调用 resize 方法扩充 HashMap 的容量。每扩充一次，HashMap 的容量就增大一倍。 </p>
+<p>上面程序中使用的 table 其实就是一个普通数组，每个数组都有一个固定的长度，这个数组的长度就是 HashMap 的容量。HashMap 包含如下几个构造器：</p>
+<blockquote>
+<ul>
+<li>HashMap()：构建一个初始容量为 16，负载因子为 0.75 的 HashMap。 </li>
+<li>HashMap(int initialCapacity)：构建一个初始容量为 initialCapacity，负载因子为 0.75 的 HashMap。 </li>
+<li>HashMap(int initialCapacity, float loadFactor)：以指定初始容量、指定的负载因子创建一个 HashMap。 </li>
+</ul>
+</blockquote>
+<p>当创建一个 HashMap 时，系统会自动创建一个 table 数组来保存 HashMap 中的 Entry，下面是 HashMap 中一个构造器的代码：</p>
+<pre><code><span class="comment">// 以指定初始化容量、负载因子创建 HashMap   </span>
+ <span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span>   
+ </span>{   
+     <span class="comment">// 初始容量不能为负数  </span>
+     <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)   
+         <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(   
+        <span class="string">"Illegal initial capacity: "</span> +   
+             initialCapacity);   
+     <span class="comment">// 如果初始容量大于最大容量，让出示容量  </span>
+     <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)   
+         initialCapacity = MAXIMUM_CAPACITY;   
+     <span class="comment">// 负载因子必须大于 0 的数值  </span>
+     <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))   
+         <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(   
+         loadFactor);   
+     <span class="comment">// 计算出大于 initialCapacity 的最小的 2 的 n 次方值。  </span>
+     <span class="keyword">int</span> capacity = <span class="number">1</span>;   
+     <span class="keyword">while</span> (capacity &lt; initialCapacity)   
+         capacity &lt;&lt;= <span class="number">1</span>;   
+     <span class="keyword">this</span>.loadFactor = loadFactor;   
+     <span class="comment">// 设置容量极限等于容量 * 负载因子  </span>
+     threshold = (<span class="keyword">int</span>)(capacity * loadFactor);   
+     <span class="comment">// 初始化 table 数组  </span>
+     table = <span class="keyword">new</span> Entry[capacity];            <span class="comment">// ①  </span>
+     init();   
+ }   
+</code></pre><p>上面代码中粗体字代码包含了一个简洁的代码实现：找出大于 initialCapacity 的、最小的 2 的 n 次方值，并将其作为 HashMap 的实际容量（由 capacity 变量保存）。例如给定 initialCapacity 为 10，那么该 HashMap 的实际容量就是 16。<br>程序①号代码处可以看到：table 的实质就是一个数组，一个长度为 capacity 的数组。 </p>
+<p>对于 HashMap 及其子类而言，它们采用 Hash 算法来决定集合中元素的存储位置。当系统开始初始化 HashMap 时，系统会创建一个长度为 capacity 的 Entry 数组，这个数组里可以存储元素的位置被称为“桶（bucket）”，每个 bucket 都有其指定索引，系统可以根据其索引快速访问该 bucket 里存储的元素。 </p>
+<p>无论何时，HashMap 的每个“桶”只存储一个元素（也就是一个 Entry），由于 Entry 对象可以包含一个引用变量（就是 Entry 构造器的的最后一个参数）用于指向下一个 Entry，因此可能出现的情况是：HashMap 的 bucket 中只有一个 Entry，但这个 Entry 指向另一个 Entry ——这就形成了一个 Entry 链。</p>
+<h2 id="HashMap_的读取实现">HashMap 的读取实现</h2><p>当 HashMap 的每个 bucket 里存储的 Entry 只是单个 Entry ——也就是没有通过指针产生 Entry 链时，此时的 HashMap 具有最好的性能：当程序通过 key 取出对应 value 时，系统只要先计算出该 key 的 hashCode() 返回值，在根据该 hashCode 返回值找出该 key 在 table 数组中的索引，然后取出该索引处的 Entry，最后返回该 key 对应的 value 即可。看 HashMap 类的 get(K key) 方法代码： </p>
+<pre><code><span class="keyword">public</span> V <span class="built_in">get</span>(<span class="keyword">Object</span> <span class="variable">key</span>)   
+{   
+ <span class="comment">// 如果 key 是 null，调用 getForNullKey 取出对应的 value   </span>
+ <span class="keyword">if</span> (<span class="variable">key</span> == <span class="keyword">null</span>)   
+     <span class="keyword">return</span> getForNullKey();   
+ <span class="comment">// 根据该 key 的 hashCode 值计算它的 hash 码  </span>
+ <span class="built_in">int</span> hash = hash(<span class="variable">key</span>.hashCode());   
+ <span class="comment">// 直接取出 table 数组中指定索引处的值，  </span>
+ <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[indexFor(hash, table.length)];   
+     e != <span class="keyword">null</span>;   
+     <span class="comment">// 搜索该 Entry 链的下一个 Entr   </span>
+     e = e.next)         <span class="comment">// ①  </span>
+ {   
+     <span class="keyword">Object</span> k;   
+     <span class="comment">// 如果该 Entry 的 key 与被搜索 key 相同  </span>
+     <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.<span class="variable">key</span>) == <span class="variable">key</span>   
+         || <span class="variable">key</span>.equals(k)))   
+         <span class="keyword">return</span> e.value;   
+ }   
+ <span class="keyword">return</span> <span class="keyword">null</span>;   
+}   
+</code></pre><p>从上面代码中可以看出，如果 HashMap 的每个 bucket 里只有一个 Entry 时，HashMap 可以根据索引、快速地取出该 bucket 里的 Entry；在发生“Hash 冲突”的情况下，单个 bucket 里存储的不是一个 Entry，而是一个 Entry 链，系统只能必须按顺序遍历每个 Entry，直到找到想搜索的 Entry 为止——如果恰好要搜索的 Entry 位于该 Entry 链的最末端（该 Entry 是最早放入该 bucket 中），那系统必须循环到最后才能找到该元素。 </p>
+<p>归纳起来简单地说，HashMap 在底层将 key-value 当成一个整体进行处理，这个整体就是一个 Entry 对象。HashMap 底层采用一个 Entry[] 数组来保存所有的 key-value 对，当需要存储一个 Entry 对象时，会根据 Hash 算法来决定其存储位置；当需要取出一个 Entry 时，也会根据 Hash 算法找到其存储位置，直接取出该 Entry。由此可见：HashMap 之所以能快速存、取它所包含的 Entry，完全类似于现实生活中母亲从小教我们的：不同的东西要放在不同的位置，需要时才能快速找到它。 </p>
+<p>当创建 HashMap 时，有一个默认的负载因子（load factor），其默认值为 0.75，这是时间和空间成本上一种折衷：增大负载因子可以减少 Hash 表（就是那个 Entry 数组）所占用的内存空间，但会增加查询数据的时间开销，而查询是最频繁的的操作（HashMap 的 get() 与 put() 方法都要用到查询）；减小负载因子会提高数据查询的性能，但会增加 Hash 表所占用的内存空间。 </p>
+<p>掌握了上面知识之后，我们可以在创建 HashMap 时根据实际需要适当地调整 load factor 的值；如果程序比较关心空间开销、内存比较紧张，可以适当地增加负载因子；如果程序比较关心时间开销，内存比较宽裕则可以适当的减少负载因子。通常情况下，程序员无需改变负载因子的值。 </p>
+<p>如果开始就知道 HashMap 会保存多个 key-value 对，可以在创建时就使用较大的初始化容量，如果 HashMap 中 Entry 的数量一直不会超过极限容量（capacity * load factor），HashMap 就无需调用 resize() 方法重新分配 table 数组，从而保证较好的性能。当然，开始就将初始容量设置太高可能会浪费空间（系统需要创建一个长度为 capacity 的 Entry 数组），因此创建 HashMap 时初始化容量设置也需要小心对待。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Study-Notes/">Study Notes</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HashMap/">HashMap</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/06/15/HashMap/" data-title="HashMap | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/14/hadoop-info/"  title="hadoop 2.x 基础">
+ <strong>下一篇：</strong><br/> 
+ <span>hadoop 2.x 基础
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+    <!-- ��˵���ۿ� start -->
+    <div class="ds-thread" data-thread-key="2015/06/15/HashMap/" data-title="HashMap" data-url="http://yoursite.com/2015/06/15/HashMap/"></div>
+    <!-- ��˵���ۿ� end -->
+    <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'undefined'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      <!-- ��˵����JS���� end -->
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Study-Notes/" title="Study Notes">Study Notes<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HashMap/" title="HashMap">HashMap<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/springmvc/" title="springmvc">springmvc<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p>  不乱于心，不困于情！ <br/>
+			不畏将来，不念过往！</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2692340043" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SurperSniper" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:surpersniper1992@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="lmg">lmg</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SuperSniper"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fnull' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

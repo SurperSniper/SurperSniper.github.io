@@ -1,0 +1,595 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>垃圾收集 | Zzzz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="lmg">
+    
+
+    
+    <meta name="description" content="垃圾收集
+垃圾收集并不等于“破坏”！
+  Java可用垃圾收集器回收由不再使用的对象占据的内存。现在考虑一种非常特殊且不多见的情况。假定我们的对象分配了一个“特殊”内存区域，没有使用new。垃圾收集器只知道释放那些由new分配的内存，所以不知道如何释放对象的“特殊”内存。为解决这个问题，Java提供了一个名为finalize()的方法，可为我们的类定义它。在理想情况下，它的工作原理应该是这样的：一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="垃圾收集">
+<meta property="og:url" content="http://yoursite.com/2015/06/09/think-in-java-note-01/index.html">
+<meta property="og:site_name" content="Zzzz">
+<meta property="og:description" content="垃圾收集
+垃圾收集并不等于“破坏”！
+  Java可用垃圾收集器回收由不再使用的对象占据的内存。现在考虑一种非常特殊且不多见的情况。假定我们的对象分配了一个“特殊”内存区域，没有使用new。垃圾收集器只知道释放那些由new分配的内存，所以不知道如何释放对象的“特殊”内存。为解决这个问题，Java提供了一个名为finalize()的方法，可为我们的类定义它。在理想情况下，它的工作原理应该是这样的：一">
+<meta property="og:updated_time" content="2015-06-15T02:55:38.686Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="垃圾收集">
+<meta name="twitter:description" content="垃圾收集
+垃圾收集并不等于“破坏”！
+  Java可用垃圾收集器回收由不再使用的对象占据的内存。现在考虑一种非常特殊且不多见的情况。假定我们的对象分配了一个“特殊”内存区域，没有使用new。垃圾收集器只知道释放那些由new分配的内存，所以不知道如何释放对象的“特殊”内存。为解决这个问题，Java提供了一个名为finalize()的方法，可为我们的类定义它。在理想情况下，它的工作原理应该是这样的：一">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zzzz" title="Zzzz"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zzzz">Zzzz</a></h1>
+				<h2 class="blog-motto">Do your best under limited conditions</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/09/think-in-java-note-01/" title="垃圾收集" itemprop="url">垃圾收集</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-09T15:44:47.000Z" itemprop="datePublished"> 发表于 2015-06-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#垃圾收集"><span class="toc-number">1.</span> <span class="toc-text">垃圾收集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#初始化"><span class="toc-number">2.</span> <span class="toc-text">初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化顺序"><span class="toc-number">2.1.</span> <span class="toc-text">初始化顺序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#静态数据的初始化"><span class="toc-number">2.2.</span> <span class="toc-text">静态数据的初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象的创建过程"><span class="toc-number">2.3.</span> <span class="toc-text">对象的创建过程</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="垃圾收集">垃圾收集</h1><ul>
+<li><p><strong>垃圾收集并不等于“破坏”！</strong></p>
+<p>  Java可用垃圾收集器回收由不再使用的对象占据的内存。现在考虑一种非常特殊且不多见的情况。假定我们的对象分配了一个“特殊”内存区域，没有使用new。垃圾收集器只知道释放那些由new分配的内存，所以不知道如何释放对象的“特殊”内存。为解决这个问题，Java提供了一个名为finalize()的方法，可为我们的类定义它。在理想情况下，它的工作原理应该是这样的：一旦垃圾收集器准备好释放对象占用的存储空间，它首先调用finalize()，而且只有在下一次垃圾收集过程中，才会真正回收对象的内存。所以如果使用finalize()，就可以在垃圾收集期间进行一些重要的清除或清扫工作。</p>
+<p>  但也是一个潜在的编程陷阱，因为有些程序员（特别是在C++开发背景的）刚开始可能会错误认为它就是在C++中为“破坏器”（Destructor）使用的finalize()——破坏（清除）一个对象的时候，肯定会调用这个函数。但在这里有必要区分一下C++和Java的区别，因为C++的对象肯定会被清除（排开编程错误的因素），而Java对象并非肯定能作为垃圾被“收集”去</p>
+</li>
+<li><p><strong>我们的对象可能不会当作垃圾被收掉！</strong></p>
+<p>  有时可能发现一个对象的存储空间永远都不会释放，因为自己的程序永远都接近于用光空间的临界点。若程序执行结束，而且垃圾收集器一直都没有释放我们创建的任何对象的存储空间，则随着程序的退出，那些资源会返回给操作系统。这是一件好事情，因为垃圾收集本身也要消耗一些开销。如永远都不用它，那么永远也不用支出这部分开销。</p>
+</li>
+<li><p><strong>垃圾收集只跟内存有关！</strong></p>
+<p>  垃圾收集器存在的唯一原因是为了回收程序不再使用的内存。所以对于与垃圾收集有关的任何活动来说，其中最值得注意的是finalize()方法，它们也必须同内存以及它的回收有关。<br>  但这是否意味着假如对象包含了其他对象，finalize()就应该明确释放那些对象呢？答案是否定的——垃圾收集器会负责释放所有对象占据的内存，无论这些对象是如何创建的。它将对finalize()的需求限制到特殊的情况。在这种情况下，我们的对象可采用与创建对象时不同的方法分配一些存储空间。但大家或许会注意到，Java中的所有东西都是对象，所以这到底是怎么一回事呢？</p>
+<p>  之所以要使用finalize()，看起来似乎是由于有时需要采取与Java的普通方法不同的一种方法，通过分配内存来做一些具有C风格的事情。这主要可以通过“固有方法”来进行，它是从Java里调用非Java方法的一种方式（固有方法的问题在附录A讨论）。C和C++是目前唯一获得固有方法支持的语言。但由于它们能调用通过其他语言编写的子程序，所以能够有效地调用任何东西。在非Java代码内部，也许能调用C的malloc()系列函数，用它分配存储空间。而且除非调用了free()，否则存储空间不会得到释放，从而造成内存“漏洞”的出现。当然，free()是一个C和C++函数，所以我们需要在finalize()内部的一个固有方法中调用它。</p>
+<p>  读完上述文字后，大家或许已弄清楚了自己不必过多地使用finalize()。这个思想是正确的；它并不是进行普通清除工作的理想场所。</p>
+<blockquote>
+<p>finalize()最有用处的地方之一是观察垃圾收集的过程</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="初始化">初始化</h1><hr>
+<h2 id="初始化顺序">初始化顺序</h2><p>在一个类里，初始化的顺序是由变量在类内的定义顺序决定的。即使变量定义大量遍布于方法定义的中间，那些变量仍会在调用任何方法之前得到初始化——甚至在构建器调用之前。</p>
+<pre><code><span class="comment">//: OrderOfInitialization.java</span>
+<span class="comment">// Demonstrates initialization order.</span>
+<span class="comment">// When the constructor is called, to create a</span>
+<span class="comment">// Tag object, you'll see a message:</span>
+<span class="keyword">class</span> <span class="title">Tag</span> {
+Tag(<span class="keyword">int</span> marker) {
+System.<span class="keyword">out</span>.println(<span class="string">"Tag("</span> + marker + <span class="string">")"</span>);
+}
+}
+<span class="keyword">class</span> <span class="title">Card</span> {
+Tag t1 = <span class="keyword">new</span> Tag(<span class="number">1</span>); <span class="comment">// Before constructor</span>
+Card() {
+<span class="comment">// Indicate we're in the constructor:</span>
+System.<span class="keyword">out</span>.println(<span class="string">"Card()"</span>);
+t3 = <span class="keyword">new</span> Tag(<span class="number">33</span>); <span class="comment">// Re-initialize t3</span>
+}
+Tag t2 = <span class="keyword">new</span> Tag(<span class="number">2</span>); <span class="comment">// After constructor</span>
+<span class="function"><span class="keyword">void</span> <span class="title">f</span>(<span class="params"></span>) </span>{
+System.<span class="keyword">out</span>.println(<span class="string">"f()"</span>);
+}
+Tag t3 = <span class="keyword">new</span> Tag(<span class="number">3</span>); <span class="comment">// At end</span>
+}
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">OrderOfInitialization</span> {
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{
+Card t = <span class="keyword">new</span> Card();
+t.f(); <span class="comment">// Shows that construction is done</span>
+}}
+<span class="comment">//输出结果</span>
+Tag(<span class="number">1</span>)
+Tag(<span class="number">2</span>)
+Tag(<span class="number">3</span>)
+Card()
+Tag(<span class="number">33</span>)
+f()
+</code></pre><h2 id="静态数据的初始化">静态数据的初始化</h2><p>若数据是静态的（static），那么同样的事情就会发生；如果它属于一个基本类型（主类型），而且未对其初始化，就会自动获得自己的标准基本类型初始值；如果它是指向一个对象的句柄，那么除非新建一个对象，并将句柄同它连接起来，否则就会得到一个空值（NULL）。<br>如果想在定义的同时进行初始化，采取的方法与非静态值表面看起来是相同的。但由于static值只有一个存储区域，所以无论创建多少个对象，都必然会遇到何时对那个存储区域进行初始化的问题。</p>
+<pre><code><span class="comment">//: StaticInitialization.java</span>
+<span class="comment">// Specifying initial values in a</span>
+<span class="comment">// class definition.</span>
+<span class="keyword">class</span> <span class="title">Bowl</span> {
+Bowl(<span class="keyword">int</span> marker) {
+System.<span class="keyword">out</span>.println(<span class="string">"Bowl("</span> + marker + <span class="string">")"</span>);
+}
+<span class="function"><span class="keyword">void</span> <span class="title">f</span>(<span class="params"><span class="keyword">int</span> marker</span>) </span>{
+System.<span class="keyword">out</span>.println(<span class="string">"f("</span> + marker + <span class="string">")"</span>);
+}
+}
+<span class="keyword">class</span> <span class="title">Table</span> {
+<span class="keyword">static</span> Bowl b1 = <span class="keyword">new</span> Bowl(<span class="number">1</span>);
+Table() {
+System.<span class="keyword">out</span>.println(<span class="string">"Table()"</span>);
+b2.f(<span class="number">1</span>);
+}
+<span class="function"><span class="keyword">void</span> <span class="title">f2</span>(<span class="params"><span class="keyword">int</span> marker</span>) </span>{
+System.<span class="keyword">out</span>.println(<span class="string">"f2("</span> + marker + <span class="string">")"</span>);
+}
+<span class="keyword">static</span> Bowl b2 = <span class="keyword">new</span> Bowl(<span class="number">2</span>);
+}
+<span class="keyword">class</span> <span class="title">Cupboard</span> {
+Bowl b3 = <span class="keyword">new</span> Bowl(<span class="number">3</span>);
+<span class="number">113</span>
+<span class="keyword">static</span> Bowl b4 = <span class="keyword">new</span> Bowl(<span class="number">4</span>);
+Cupboard() {
+System.<span class="keyword">out</span>.println(<span class="string">"Cupboard()"</span>);
+b4.f(<span class="number">2</span>);
+}
+<span class="function"><span class="keyword">void</span> <span class="title">f3</span>(<span class="params"><span class="keyword">int</span> marker</span>) </span>{
+System.<span class="keyword">out</span>.println(<span class="string">"f3("</span> + marker + <span class="string">")"</span>);
+}
+<span class="keyword">static</span> Bowl b5 = <span class="keyword">new</span> Bowl(<span class="number">5</span>);
+}
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">StaticInitialization</span> {
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{
+System.<span class="keyword">out</span>.println(
+<span class="string">"Creating new Cupboard() in main"</span>);
+<span class="keyword">new</span> Cupboard();
+System.<span class="keyword">out</span>.println(
+<span class="string">"Creating new Cupboard() in main"</span>);
+<span class="keyword">new</span> Cupboard();
+t2.f2(<span class="number">1</span>);
+t3.f3(<span class="number">1</span>);
+}
+<span class="keyword">static</span> Table t2 = <span class="keyword">new</span> Table();
+<span class="keyword">static</span> Cupboard t3 = <span class="keyword">new</span> Cupboard();
+}
+<span class="comment">//输出结果</span>
+Bowl(<span class="number">1</span>)
+Bowl(<span class="number">2</span>)
+Table()
+f(<span class="number">1</span>)
+Bowl(<span class="number">4</span>)
+Bowl(<span class="number">5</span>)
+Bowl(<span class="number">3</span>)
+Cupboard()
+f(<span class="number">2</span>)
+<span class="function">Creating new <span class="title">Cupboard</span>(<span class="params"></span>) <span class="keyword">in</span> main
+<span class="title">Bowl</span>(<span class="params"><span class="number">3</span></span>)
+<span class="title">Cupboard</span>(<span class="params"></span>)
+<span class="title">f</span>(<span class="params"><span class="number">2</span></span>)
+Creating new <span class="title">Cupboard</span>(<span class="params"></span>) <span class="keyword">in</span> main
+<span class="title">Bowl</span>(<span class="params"><span class="number">3</span></span>)
+<span class="title">Cupboard</span>(<span class="params"></span>)
+<span class="title">f</span>(<span class="params"><span class="number">2</span></span>)
+<span class="title">f2</span>(<span class="params"><span class="number">1</span></span>)
+<span class="title">f3</span>(<span class="params"><span class="number">1</span></span>)</span>
+</code></pre><blockquote>
+<p>static 初始化只有在必要的时候才会进行。如果不创建一个Table 对象，而且永远都不引用Table.b1 或<br>Table.b2，那么static Bowl b1 和b2 永远都不会创建。然而，只有在创建了第一个Table 对象之后（或者<br>发生了第一次static 访问），它们才会创建。在那以后，static 对象不会重新初始化。</p>
+<p>初始化的顺序是首先static（如果它们尚未由前一次对象创建过程初始化），接着是非static对象。大家可从输出结果中找到相应的证据。</p>
+</blockquote>
+<h2 id="对象的创建过程">对象的创建过程</h2><p>请考虑一个名为Dog的类：</p>
+<ol>
+<li>类型为Dog的一个对象首次创建时，或者Dog类的static方法／static字段首次访问时，Java解释器必须找到Dog.class（在事先设好的类路径里搜索）。</li>
+<li>找到Dog.class后（它会创建一个Class对象），它的所有static初始化模块都会运行。因此，static初始化仅发生一次——在Class对象首次载入的时候。</li>
+<li>创建一个new Dog()时，Dog对象的构建进程首先会在内存堆（Heap）里为一个Dog对象分配足够多的存储空间。</li>
+<li>这种存储空间会清为零，将Dog中的所有基本类型设为它们的默认值（零用于数字，以及boolean和char的等价设定）。</li>
+<li>进行字段定义时发生的所有初始化都会执行。</li>
+<li>执行构建器。</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Study-Notes/">Study Notes</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/06/09/think-in-java-note-01/" data-title="垃圾收集 | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/06/10/linux-order/" title="Linux 常用命令">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Linux 常用命令</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/06/07/springmvc-framework/"  title="SpringMVC">
+ <strong>下一篇：</strong><br/> 
+ <span>SpringMVC
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+    <!-- ��˵���ۿ� start -->
+    <div class="ds-thread" data-thread-key="2015/06/09/think-in-java-note-01/" data-title="垃圾收集" data-url="http://yoursite.com/2015/06/09/think-in-java-note-01/"></div>
+    <!-- ��˵���ۿ� end -->
+    <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'undefined'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      <!-- ��˵����JS���� end -->
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Study-Notes/" title="Study Notes">Study Notes<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HashMap/" title="HashMap">HashMap<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/springmvc/" title="springmvc">springmvc<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p>  不乱于心，不困于情！ <br/>
+			不畏将来，不念过往！</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2692340043" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SurperSniper" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:surpersniper1992@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="lmg">lmg</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SuperSniper"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fnull' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
