@@ -1,0 +1,1091 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java 程序优化：字符串操作、基本运算方法等优化策略 | Zzzz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="lmg">
+    
+
+    
+    <meta name="description" content="字符串操作优化字符串对象
+字符串对象或者其等价对象 (如 char 数组)，在内存中总是占据最大的空间块，因此如何高效地处理字符串，是提高系统整体性能的关键。
+String 对象可以认为是 char 数组的延伸和进一步封装，它主要由 3 部分组成：char 数组、偏移量和 String 的长度。char 数组表示 String 的内容，它是 String 对象所表示字符串的超集。String 的真">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 程序优化：字符串操作、基本运算方法等优化策略">
+<meta property="og:url" content="http://yoursite.com/2015/06/17/java-string-optimization/index.html">
+<meta property="og:site_name" content="Zzzz">
+<meta property="og:description" content="字符串操作优化字符串对象
+字符串对象或者其等价对象 (如 char 数组)，在内存中总是占据最大的空间块，因此如何高效地处理字符串，是提高系统整体性能的关键。
+String 对象可以认为是 char 数组的延伸和进一步封装，它主要由 3 部分组成：char 数组、偏移量和 String 的长度。char 数组表示 String 的内容，它是 String 对象所表示字符串的超集。String 的真">
+<meta property="og:updated_time" content="2015-06-17T08:41:10.502Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 程序优化：字符串操作、基本运算方法等优化策略">
+<meta name="twitter:description" content="字符串操作优化字符串对象
+字符串对象或者其等价对象 (如 char 数组)，在内存中总是占据最大的空间块，因此如何高效地处理字符串，是提高系统整体性能的关键。
+String 对象可以认为是 char 数组的延伸和进一步封装，它主要由 3 部分组成：char 数组、偏移量和 String 的长度。char 数组表示 String 的内容，它是 String 对象所表示字符串的超集。String 的真">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zzzz" title="Zzzz"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zzzz">Zzzz</a></h1>
+				<h2 class="blog-motto">Do your best under limited conditions</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/17/java-string-optimization/" title="Java 程序优化：字符串操作、基本运算方法等优化策略" itemprop="url">Java 程序优化：字符串操作、基本运算方法等优化策略</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-17T07:59:18.000Z" itemprop="datePublished"> 发表于 2015-06-17</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串操作优化"><span class="toc-number">1.</span> <span class="toc-text">字符串操作优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据定义、运算逻辑优化"><span class="toc-number">2.</span> <span class="toc-text">数据定义、运算逻辑优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用局部变量"><span class="toc-number">2.1.</span> <span class="toc-text">使用局部变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#位运算代替乘除法"><span class="toc-number">2.2.</span> <span class="toc-text">位运算代替乘除法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#替换_switch"><span class="toc-number">2.3.</span> <span class="toc-text">替换 switch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一维数组代替二维数组"><span class="toc-number">2.4.</span> <span class="toc-text">一维数组代替二维数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提取表达式"><span class="toc-number">2.5.</span> <span class="toc-text">提取表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化循环"><span class="toc-number">2.6.</span> <span class="toc-text">优化循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#布尔运算代替位运算"><span class="toc-number">2.7.</span> <span class="toc-text">布尔运算代替位运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用_arrayCopy()"><span class="toc-number">2.8.</span> <span class="toc-text">使用 arrayCopy()</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="字符串操作优化">字符串操作优化</h1><p><strong>字符串对象</strong></p>
+<p>字符串对象或者其等价对象 (如 char 数组)，在内存中总是占据最大的空间块，因此如何高效地处理字符串，是提高系统整体性能的关键。</p>
+<p>String 对象可以认为是 char 数组的延伸和进一步封装，它主要由 3 部分组成：char 数组、偏移量和 String 的长度。char 数组表示 String 的内容，它是 String 对象所表示字符串的超集。String 的真实内容还需要由偏移量和长度在这个 char 数组中进行定位和截取。</p>
+<p>String 有 3 个基本特点：</p>
+<ol>
+<li>不变性</li>
+<li>针对常量池的优化</li>
+<li>类的 final 定义</li>
+</ol>
+<p>不变性指的是 String 对象一旦生成，则不能再对它进行改变。String 的这个特性可以泛化成不变 (immutable) 模式，即一个对象的状态在对象被创建之后就不再发生变化。不变模式的主要作用在于当一个对象需要被多线程共享，并且访问频繁时，可以省略同步和锁等待的时间，从而大幅提高系统性能。</p>
+<p>针对常量池的优化指的是当两个 String 对象拥有相同的值时，它们只引用常量池中的同一个拷贝，当同一个字符串反复出现时，这个技术可以大幅度节省内存空间。</p>
+<p>下面代码 str1、str2、str4 引用了相同的地址，但是 str3 却重新开辟了一块内存空间，虽然 str3 单独占用了堆空间，但是它所指向的实体和 str1 完全一样。代码如下清单 1 所示。<br><em>清单 1. 示例代码</em></p>
+<pre><code>public class StringDemo {
+ public static void main<span class="params">(String[] args)</span>{
+ String str1 = <span class="string">"abc"</span>;
+ String str2 = <span class="string">"abc"</span>;
+ String str3 = new String<span class="params">(<span class="string">"abc"</span>)</span>;
+ String str4 = str1;
+ System.out.println<span class="params">(<span class="string">"is str1 = str2?"</span>+<span class="params">(str1==str2)</span>)</span>;
+ System.out.println<span class="params">(<span class="string">"is str1 = str3?"</span>+<span class="params">(str1==str3)</span>)</span>;
+ System.out.println<span class="params">(<span class="string">"is str1 refer to str3?"</span>+<span class="params">(str1.intern<span class="params">()</span>==str3.intern<span class="params">()</span>)</span>)</span>;
+ System.out.println<span class="params">(<span class="string">"is str1 = str4"</span>+<span class="params">(str1==str4)</span>)</span>;
+ System.out.println<span class="params">(<span class="string">"is str2 = str4"</span>+<span class="params">(str2==str4)</span>)</span>;
+ System.out.println<span class="params">(<span class="string">"is str4 refer to str3?"</span>+<span class="params">(str4.intern<span class="params">()</span>==str3.intern<span class="params">()</span>)</span>)</span>;
+ }
+}
+</code></pre><p>输出如清单 2 所示。</p>
+<p><em>清单 2. 输出结果</em></p>
+<pre><code><span class="keyword">is</span> str1 = str2?<span class="constant">true</span>
+<span class="keyword">is</span> str1 = str3?<span class="constant">false</span>
+<span class="keyword">is</span> str1 refer <span class="keyword">to</span> str3?<span class="constant">true</span>
+<span class="keyword">is</span> str1 = str4true
+<span class="keyword">is</span> str2 = str4true
+<span class="keyword">is</span> str4 refer <span class="keyword">to</span> str3?<span class="constant">true</span>
+</code></pre><p><strong>SubString 使用技巧</strong></p>
+<p>String 的 substring 方法源码在最后一行新建了一个 String 对象，new String(offset+beginIndex,endIndex-beginIndex,value);该行代码的目的是为了能高效且快速地共享 String 内的 char 数组对象。但在这种通过偏移量来截取字符串的方法中，String 的原生内容 value 数组被复制到新的子字符串中。设想，如果原始字符串很大，截取的字符长度却很短，那么截取的子字符串中包含了原生字符串的所有内容，并占据了相应的内存空间，而仅仅通过偏移量和长度来决定自己的实际取值。这种算法提高了速度却浪费了空间。</p>
+<p>下面代码演示了使用 substring 方法在一个很大的 string 独享里面截取一段很小的字符串，如果采用 string 的 substring 方法会造成内存溢出，如果采用反复创建新的 string 方法可以确保正常运行。<br><em>清单 3.substring 方法演示</em></p>
+<pre><code><span class="keyword">import</span> java.util.ArrayList;
+<span class="keyword">import</span> java.util.List;
+
+<span class="keyword">public</span> class StringDemo {
+ <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args){
+ List&lt;<span class="keyword">String</span>&gt; handler = <span class="keyword">new</span> ArrayList&lt;<span class="keyword">String</span>&gt;();
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1000</span>;i++){
+ HugeStr h = <span class="keyword">new</span> HugeStr();
+ ImprovedHugeStr h1 = <span class="keyword">new</span> ImprovedHugeStr();
+ handler.<span class="built_in">add</span>(h.getSubString(<span class="number">1</span>, <span class="number">5</span>));
+ handler.<span class="built_in">add</span>(h1.getSubString(<span class="number">1</span>, <span class="number">5</span>));
+ }
+ }
+
+ <span class="keyword">static</span> class HugeStr{
+ <span class="keyword">private</span> <span class="keyword">String</span> <span class="built_in">str</span> = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="keyword">new</span> <span class="built_in">char</span>[<span class="number">800000</span>]);
+ <span class="keyword">public</span> <span class="keyword">String</span> getSubString(<span class="built_in">int</span> begin,<span class="built_in">int</span> end){
+ <span class="keyword">return</span> <span class="built_in">str</span>.substring(begin, end);
+ }
+ }
+
+ <span class="keyword">static</span> class ImprovedHugeStr{
+ <span class="keyword">private</span> <span class="keyword">String</span> <span class="built_in">str</span> = <span class="keyword">new</span> <span class="keyword">String</span>(<span class="keyword">new</span> <span class="built_in">char</span>[<span class="number">10000000</span>]);
+ <span class="keyword">public</span> <span class="keyword">String</span> getSubString(<span class="built_in">int</span> begin,<span class="built_in">int</span> end){
+ <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">String</span>(<span class="built_in">str</span>.substring(begin, end));
+ }
+ }
+}
+</code></pre><p>输出结果如清单 4 所示。</p>
+<p><em>清单 4. 输出结果</em></p>
+<pre><code>Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java<span class="class">.lang</span><span class="class">.OutOfMemoryError</span>: Java heap space
+at java<span class="class">.util</span><span class="class">.Arrays</span><span class="class">.copyOf</span>(Unknown Source)
+at java<span class="class">.lang</span><span class="class">.StringValue</span><span class="class">.from</span>(Unknown Source)
+at java<span class="class">.lang</span><span class="class">.String</span>.&lt;init&gt;(Unknown Source)
+at StringDemo<span class="variable">$ImprovedHugeStr</span>.&lt;init&gt;(StringDemo<span class="class">.java</span>:<span class="number">23</span>)
+at StringDemo.<span class="function"><span class="title">main</span><span class="params">(StringDemo.java:<span class="number">9</span>)</span></span>
+</code></pre><p>ImprovedHugeStr 可以工作是因为它使用没有内存泄漏的 String 构造函数重新生成了 String 对象，使得由 substring() 方法返回的、存在内存泄漏问题的 String 对象失去所有的强引用，从而被垃圾回收器识别为垃圾对象进行回收，保证了系统内存的稳定。</p>
+<p>String 的 split 方法支持传入正则表达式帮助处理字符串，但是简单的字符串分割时性能较差。</p>
+<p>对比 split 方法和 StringTokenizer 类的处理字符串性能，代码如清单 5 所示。</p>
+<p><strong>切分字符串方式讨论</strong></p>
+<p>String 的 split 方法支持传入正则表达式帮助处理字符串，操作较为简单，但是缺点是它所依赖的算法在对简单的字符串分割时性能较差。清单 5 所示代码对比了 String 的 split 方法和调用 StringTokenizer 类来处理字符串时性能的差距。<br><em>清单 5.String 的 split 方法演示</em></p>
+<pre><code><span class="keyword">import</span> java.util.StringTokenizer;
+
+
+<span class="keyword">public</span> class splitandstringtokenizer {
+ <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args){
+ <span class="keyword">String</span> orgStr = <span class="keyword">null</span>;
+ StringBuffer sb = <span class="keyword">new</span> StringBuffer();
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100000</span>;i++){
+ sb.<span class="built_in">append</span>(i);
+ sb.<span class="built_in">append</span>(<span class="string">","</span>);
+ }
+ orgStr = sb.toString();
+ <span class="keyword">long</span> start = System.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100000</span>;i++){
+ orgStr.<span class="built_in">split</span>(<span class="string">","</span>);
+ }
+ <span class="keyword">long</span> end = System.currentTimeMillis();
+ System.out.<span class="built_in">println</span>(end-start);
+
+ start = System.currentTimeMillis();
+ <span class="keyword">String</span> orgStr1 = sb.toString();
+ StringTokenizer st = <span class="keyword">new</span> StringTokenizer(orgStr1,<span class="string">","</span>);
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100000</span>;i++){
+ st.nextToken();
+ }
+ st = <span class="keyword">new</span> StringTokenizer(orgStr1,<span class="string">","</span>);
+ end = System.currentTimeMillis();
+ System.out.<span class="built_in">println</span>(end-start);
+
+ start = System.currentTimeMillis();
+ <span class="keyword">String</span> orgStr2 = sb.toString();
+ <span class="keyword">String</span> temp = orgStr2;
+ <span class="keyword">while</span>(<span class="keyword">true</span>){
+ <span class="keyword">String</span> splitStr = <span class="keyword">null</span>;
+ <span class="built_in">int</span> j=temp.indexOf(<span class="string">","</span>);
+ <span class="keyword">if</span>(j&lt;<span class="number">0</span>)<span class="keyword">break</span>;
+ splitStr=temp.substring(<span class="number">0</span>, j);
+ temp = temp.substring(j+<span class="number">1</span>);
+ }
+ temp=orgStr2;
+ end = System.currentTimeMillis();
+ System.out.<span class="built_in">println</span>(end-start);
+ }
+}
+</code></pre><p>输出如清单 6 所示：<br><em>清单 6. 运行输出结果</em></p>
+<pre><code>39015
+16
+15
+</code></pre><p>当一个 StringTokenizer 对象生成后，通过它的 nextToken() 方法便可以得到下一个分割的字符串，通过 hasMoreToken 方法可以知道是否有更多的字符串需要处理。对比发现 split 的耗时非常的长，采用 StringTokenizer 对象处理速度很快。我们尝试自己实现字符串分割算法，使用 substring 方法和 indexOf 方法组合而成的字符串分割算法可以帮助很快切分字符串并替换内容。</p>
+<p>由于 String 是不可变对象，因此，在需要对字符串进行修改操作时 (如字符串连接、替换)，String 对象会生成新的对象，所以其性能相对较差。但是 JVM 会对代码进行彻底的优化，将多个连接操作的字符串在编译时合成一个单独的长字符串。</p>
+<p>以上实例运行结果差异较大的原因是 split 算法对每一个字符进行了对比，这样当字符串较大时，需要把整个字符串读入内存，逐一查找，找到符合条件的字符，这样做较为耗时。而 StringTokenizer 类允许一个应用程序进入一个令牌（tokens），StringTokenizer 类的对象在内部已经标识化的字符串中维持了当前位置。一些操作使得在现有位置上的字符串提前得到处理。 一个令牌的值是由获得其曾经创建 StringTokenizer 类对象的字串所返回的。<br><em>清单 7.split 类源代码</em></p>
+<pre><code><span class="built_in">import</span> java.util.ArrayList;
+
+public class Split {
+public String[] split<span class="params">(CharSequence input, int limit)</span> { 
+int index = <span class="number">0</span>; 
+boolean matchLimited = limit &gt; <span class="number">0</span>; 
+ArrayList&lt;String&gt; matchList = new ArrayList&lt;String&gt;<span class="params">()</span>; 
+Matcher m = matcher<span class="params">(input)</span>; 
+<span class="comment">// Add segments before each match found </span>
+while<span class="params">(m.find<span class="params">()</span>)</span> { 
+<span class="keyword">if</span> <span class="params">(!matchLimited || matchList.size<span class="params">()</span> &lt; limit - <span class="number">1</span>)</span> { 
+String match = input.subSequence<span class="params">(index, m.start<span class="params">()</span>)</span>.toString<span class="params">()</span>; 
+matchList.add<span class="params">(match)</span>; 
+index = m.end<span class="params">()</span>; 
+} <span class="keyword">else</span> <span class="keyword">if</span> <span class="params">(matchList.size<span class="params">()</span> == limit - <span class="number">1</span>)</span> { 
+<span class="comment">// last one </span>
+String match = input.subSequence<span class="params">(index,input.length<span class="params">()</span>)</span>.toString<span class="params">()</span>; 
+matchList.add<span class="params">(match)</span>; 
+index = m.end<span class="params">()</span>; 
+} 
+} 
+<span class="comment">// If no match was found, return this </span>
+<span class="keyword">if</span> <span class="params">(index == <span class="number">0</span>)</span>{ 
+return new String[] {input.toString<span class="params">()</span>}; 
+}
+<span class="comment">// Add remaining segment </span>
+<span class="keyword">if</span> <span class="params">(!matchLimited || matchList.size<span class="params">()</span> &lt; limit)</span>{ 
+matchList.add<span class="params">(input.subSequence<span class="params">(index, input.length<span class="params">()</span>)</span>.toString<span class="params">()</span>)</span>; 
+}
+<span class="comment">// Construct result </span>
+int resultSize = matchList.size<span class="params">()</span>; 
+<span class="keyword">if</span> <span class="params">(limit == <span class="number">0</span>)</span>{ 
+while <span class="params">(resultSize &gt; <span class="number">0</span> &amp;&amp; matchList.get<span class="params">(resultSize-<span class="number">1</span>)</span>.equals<span class="params">(<span class="string">""</span>)</span>)</span> 
+resultSize--; 
+ String[] result = new String[resultSize]; 
+ return matchList.subList<span class="params">(<span class="number">0</span>, resultSize)</span>.toArray<span class="params">(result)</span>; 
+}
+}
+}
+</code></pre><p>split 借助于数据对象及字符查找算法完成了数据分割，适用于数据量较少场景。</p>
+<p><strong>合并字符串</strong></p>
+<p>由于 String 是不可变对象，因此，在需要对字符串进行修改操作时 (如字符串连接、替换)，String 对象会生成新的对象，所以其性能相对较差。但是 JVM 会对代码进行彻底的优化，将多个连接操作的字符串在编译时合成一个单独的长字符串。针对超大的 String 对象，我们采用 String 对象连接、使用 concat 方法连接、使用 StringBuilder 类等多种方式，代码如清单 8 所示。<br><em>清单 8. 处理超大 String 对象的示例代码</em></p>
+<pre><code>public class <span class="type">StringConcat</span> {
+ public <span class="keyword">static</span> <span class="type">void</span> main(<span class="type">String</span>[] args){
+ <span class="type">String</span> str = null;
+ <span class="type">String</span> <span class="literal">result</span> = <span class="string">""</span>;
+
+ long start = <span class="type">System</span>.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++){
+ str = str + i;
+ }
+ long <span class="keyword">end</span> = <span class="type">System</span>.currentTimeMillis();
+ <span class="type">System</span>.<span class="keyword">out</span>.println(<span class="keyword">end</span>-start);
+
+ start = <span class="type">System</span>.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++){
+ <span class="literal">result</span> = <span class="literal">result</span>.concat(<span class="type">String</span>.valueOf(i));
+ }
+ <span class="keyword">end</span> = <span class="type">System</span>.currentTimeMillis();
+ <span class="type">System</span>.<span class="keyword">out</span>.println(<span class="keyword">end</span>-start);
+
+ start = <span class="type">System</span>.currentTimeMillis();
+ <span class="type">StringBuilder</span> sb = new <span class="type">StringBuilder</span>();
+ <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++){
+ sb.append(i);
+ }
+ <span class="keyword">end</span> = <span class="type">System</span>.currentTimeMillis();
+ <span class="type">System</span>.<span class="keyword">out</span>.println(<span class="keyword">end</span>-start);
+ }
+}
+</code></pre><p>输出如清单 9 所示。<br><em>清单 9. 运行输出结果</em></p>
+<pre><code>375
+187
+0
+</code></pre><p>虽然第一种方法编译器判断 String 的加法运行成 StringBuilder 实现，但是编译器没有做出足够聪明的判断，每次循环都生成了新的 StringBuilder 实例从而大大降低了系统性能。</p>
+<p>StringBuffer 和 StringBuilder 都实现了 AbstractStringBuilder 抽象类，拥有几乎相同的对外借口，两者的最大不同在于 StringBuffer 对几乎所有的方法都做了同步，而 StringBuilder 并没有任何同步。由于方法同步需要消耗一定的系统资源，因此，StringBuilder 的效率也好于 StringBuffer。 但是，在多线程系统中，StringBuilder 无法保证线程安全，不能使用。代码如清单 10 所示。<br><em>清单 10.StringBuilderVSStringBuffer</em></p>
+<pre><code><span class="keyword">public</span> class StringBufferandBuilder {
+<span class="keyword">public</span> StringBuffer contents = <span class="keyword">new</span> StringBuffer(); 
+<span class="keyword">public</span> StringBuilder sbu = <span class="keyword">new</span> StringBuilder();
+
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">log</span>(<span class="keyword">String</span> message){ 
+<span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++){ 
+<span class="comment">/*
+contents.append(i); 
+contents.append(message); 
+contents.append("\n"); 
+*/</span>
+contents.<span class="built_in">append</span>(i);
+contents.<span class="built_in">append</span>(<span class="string">"\n"</span>);
+sbu.<span class="built_in">append</span>(i);
+sbu.<span class="built_in">append</span>(<span class="string">"\n"</span>);
+} 
+} 
+<span class="keyword">public</span> <span class="keyword">void</span> getcontents(){ 
+<span class="comment">//System.out.println(contents); </span>
+System.out.<span class="built_in">println</span>(<span class="string">"start print StringBuffer"</span>);
+System.out.<span class="built_in">println</span>(contents); 
+System.out.<span class="built_in">println</span>(<span class="string">"end print StringBuffer"</span>);
+}
+<span class="keyword">public</span> <span class="keyword">void</span> getcontents1(){ 
+<span class="comment">//System.out.println(contents); </span>
+System.out.<span class="built_in">println</span>(<span class="string">"start print StringBuilder"</span>);
+System.out.<span class="built_in">println</span>(sbu); 
+System.out.<span class="built_in">println</span>(<span class="string">"end print StringBuilder"</span>);
+}
+
+
+
+ <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) <span class="keyword">throws</span> InterruptedException { 
+StringBufferandBuilder ss = <span class="keyword">new</span> StringBufferandBuilder(); 
+runthread t1 = <span class="keyword">new</span> runthread(ss,<span class="string">"love"</span>);
+runthread t2 = <span class="keyword">new</span> runthread(ss,<span class="string">"apple"</span>);
+runthread t3 = <span class="keyword">new</span> runthread(ss,<span class="string">"egg"</span>);
+t1.start();
+t2.start();
+t3.start();
+t1.<span class="built_in">join</span>();
+t2.<span class="built_in">join</span>();
+t3.<span class="built_in">join</span>();
+}
+
+}
+
+class runthread extends Thread{ 
+<span class="keyword">String</span> message; 
+StringBufferandBuilder buffer; 
+<span class="keyword">public</span> runthread(StringBufferandBuilder buffer,<span class="keyword">String</span> message){ 
+<span class="keyword">this</span>.buffer = buffer;
+<span class="keyword">this</span>.message = message; 
+} 
+<span class="keyword">public</span> <span class="keyword">void</span> run(){ 
+<span class="keyword">while</span>(<span class="keyword">true</span>){ 
+buffer.<span class="built_in">log</span>(message); 
+<span class="comment">//buffer.getcontents();</span>
+buffer.getcontents1();
+<span class="keyword">try</span> {
+sleep(<span class="number">5000000</span>);
+} <span class="keyword">catch</span> (InterruptedException e) {
+<span class="comment">// <span class="doctag">TODO</span> Auto-generated catch block</span>
+e.printStackTrace();
+}
+} 
+} 
+
+
+}
+</code></pre><p>输出结果如清单 11 所示。<br><em>清单 11. 运行结果</em></p>
+<pre><code>start <span class="built_in">print</span> <span class="built_in">StringBuffer</span>
+<span class="number">0123456789</span>
+end <span class="built_in">print</span> <span class="built_in">StringBuffer</span>
+start <span class="built_in">print</span> <span class="built_in">StringBuffer</span>
+start <span class="built_in">print</span> StringBuilder
+<span class="number">01234567890123456789</span>
+end <span class="built_in">print</span> <span class="built_in">StringBuffer</span>
+start <span class="built_in">print</span> StringBuilder
+<span class="number">01234567890123456789</span>
+<span class="number">01234567890123456789</span>
+end <span class="built_in">print</span> StringBuilder
+end <span class="built_in">print</span> StringBuilder
+start <span class="built_in">print</span> <span class="built_in">StringBuffer</span>
+<span class="number">012345678901234567890123456789</span>
+end <span class="built_in">print</span> <span class="built_in">StringBuffer</span>
+start <span class="built_in">print</span> StringBuilder
+<span class="number">012345678901234567890123456789</span>
+end <span class="built_in">print</span> StringBuilder
+</code></pre><p>StringBuilder 数据并没有按照预想的方式进行操作。StringBuilder 和 StringBuffer 的扩充策略是将原有的容量大小翻倍，以新的容量申请内存空间，建立新的 char 数组，然后将原数组中的内容复制到这个新的数组中。因此，对于大对象的扩容会涉及大量的内存复制操作。如果能够预先评估大小，会提高性能。</p>
+<h1 id="数据定义、运算逻辑优化">数据定义、运算逻辑优化</h1><h2 id="使用局部变量">使用局部变量</h2><p>调用方法时传递的参数以及在调用中创建的临时变量都保存在栈 (Stack) 里面，读写速度较快。其他变量，如静态变量、实例变量等，都在堆 (heap) 中创建，读写速度较慢。清单 12 所示代码演示了使用局部变量和静态变量的操作时间对比。<br><em>清单 12. 局部变量 VS 静态变量</em></p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">variableCompare</span> {
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> b = <span class="number">0</span>;
+ <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>)</span>{
+ <span class="keyword">int</span> a = <span class="number">0</span>;
+ <span class="keyword">long</span> starttime = System.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1000000</span>;i++){
+ a++;<span class="comment">//在函数体内定义局部变量</span>
+ }
+ System.<span class="keyword">out</span>.println(System.currentTimeMillis() - starttime);
+
+ starttime = System.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1000000</span>;i++){
+ b++;<span class="comment">//在函数体内定义局部变量</span>
+ }
+ System.<span class="keyword">out</span>.println(System.currentTimeMillis() - starttime);
+ }
+}
+</code></pre><p>运行后输出如清单 13 所示。<br><em>清单 13. 运行结果</em></p>
+<pre><code>0
+15
+</code></pre><p>以上两段代码的运行时间分别为 0ms 和 15ms。由此可见，局部变量的访问速度远远高于类的成员变量。</p>
+<h2 id="位运算代替乘除法">位运算代替乘除法</h2><p>位运算是所有的运算中最为高效的。因此，可以尝试使用位运算代替部分算数运算，来提高系统的运行速度。最典型的就是对于整数的乘除运算优化。清单 14 所示代码是一段使用算数运算的实现。<br><em>清单 14. 算数运算</em></p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">yunsuan</span> {
+ <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String args[]</span>)</span>{
+ <span class="keyword">long</span> start = System.currentTimeMillis();
+ <span class="keyword">long</span> a=<span class="number">1000</span>;
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10000000</span>;i++){
+ a*=<span class="number">2</span>;
+ a/=<span class="number">2</span>;
+ }
+ System.<span class="keyword">out</span>.println(a);
+ System.<span class="keyword">out</span>.println(System.currentTimeMillis() - start);
+ start = System.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10000000</span>;i++){
+ a&lt;&lt;=<span class="number">1</span>;
+ a&gt;&gt;=<span class="number">1</span>;
+ }
+ System.<span class="keyword">out</span>.println(a);
+ System.<span class="keyword">out</span>.println(System.currentTimeMillis() - start);
+ }
+}
+</code></pre><p>运行输出如清单 15 所示。<br><em>清单 15. 运行结果</em></p>
+<pre><code>1000
+546
+1000
+63
+</code></pre><p>两段代码执行了完全相同的功能，在每次循环中，整数 1000 乘以 2，然后除以 2。第一个循环耗时 546ms，第二个循环耗时 63ms。</p>
+<h2 id="替换_switch">替换 switch</h2><p>关键字 switch 语句用于多条件判断，switch 语句的功能类似于 if-else 语句，两者的性能差不多。但是 switch 语句有性能提升空间。清单 16 所示代码演示了 Switch 与 if-else 之间的对比。<br><em>清单 16.Switch 示例</em></p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">switchCompareIf</span> {
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">switchTest</span>(<span class="params"><span class="keyword">int</span> <span class="keyword">value</span></span>)</span>{
+<span class="keyword">int</span> i = <span class="keyword">value</span>%<span class="number">10</span>+<span class="number">1</span>;
+<span class="keyword">switch</span>(i){
+<span class="keyword">case</span> <span class="number">1</span>:<span class="keyword">return</span> <span class="number">10</span>;
+<span class="keyword">case</span> <span class="number">2</span>:<span class="keyword">return</span> <span class="number">11</span>;
+<span class="keyword">case</span> <span class="number">3</span>:<span class="keyword">return</span> <span class="number">12</span>;
+<span class="keyword">case</span> <span class="number">4</span>:<span class="keyword">return</span> <span class="number">13</span>;
+<span class="keyword">case</span> <span class="number">5</span>:<span class="keyword">return</span> <span class="number">14</span>;
+<span class="keyword">case</span> <span class="number">6</span>:<span class="keyword">return</span> <span class="number">15</span>;
+<span class="keyword">case</span> <span class="number">7</span>:<span class="keyword">return</span> <span class="number">16</span>;
+<span class="keyword">case</span> <span class="number">8</span>:<span class="keyword">return</span> <span class="number">17</span>;
+<span class="keyword">case</span> <span class="number">9</span>:<span class="keyword">return</span> <span class="number">18</span>;
+<span class="keyword">default</span>:<span class="keyword">return</span> -<span class="number">1</span>;
+}
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">arrayTest</span>(<span class="params"><span class="keyword">int</span>[] <span class="keyword">value</span>,<span class="keyword">int</span> key</span>)</span>{
+<span class="keyword">int</span> i = key%<span class="number">10</span>+<span class="number">1</span>;
+<span class="keyword">if</span>(i&gt;<span class="number">9</span> || i&lt;<span class="number">1</span>){
+<span class="keyword">return</span> -<span class="number">1</span>;
+}<span class="keyword">else</span>{
+<span class="keyword">return</span> <span class="keyword">value</span>[i];
+}
+}
+
+ <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>)</span>{
+ <span class="keyword">int</span> chk = <span class="number">0</span>;
+ <span class="keyword">long</span> start=System.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10000000</span>;i++){
+ chk = switchTest(i);
+ }
+ System.<span class="keyword">out</span>.println(System.currentTimeMillis()-start);
+ chk = <span class="number">0</span>;
+ start=System.currentTimeMillis();
+ <span class="keyword">int</span>[] <span class="keyword">value</span>=<span class="keyword">new</span> <span class="keyword">int</span>[]{<span class="number">0</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>};
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10000000</span>;i++){
+ chk = arrayTest(<span class="keyword">value</span>,i);
+ }
+ System.<span class="keyword">out</span>.println(System.currentTimeMillis()-start);
+ }
+}
+</code></pre><p>运行输出如清单 17 所示。<br><em>清单 17. 运行结果</em></p>
+<pre><code>172
+93
+</code></pre><p>使用一个连续的数组代替 switch 语句，由于对数据的随机访问非常快，至少好于 switch 的分支判断，从上面例子可以看到比较的效率差距近乎 1 倍，switch 方法耗时 172ms，if-else 方法耗时 93ms。</p>
+<h2 id="一维数组代替二维数组">一维数组代替二维数组</h2><p>JDK 很多类库是采用数组方式实现的数据存储，比如 ArrayList、Vector 等，数组的优点是随机访问性能非常好。一维数组和二维数组的访问速度不一样，一维数组的访问速度要优于二维数组。在性能敏感的系统中要使用二维数组，尽量将二维数组转化为一维数组再进行处理，以提高系统的响应速度。<br><em>清单 18. 数组方式对比</em></p>
+<pre><code>public <span class="keyword">class</span> arrayTest {
+ public static void main(<span class="type">String</span><span class="literal">[]</span> args){
+ long start = <span class="type">System</span>.currentTimeMillis<span class="literal">()</span>;
+ <span class="built_in">int</span><span class="literal">[]</span> arraySingle = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">1000000</span>];
+ <span class="built_in">int</span> chk = <span class="number">0</span>;
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;arraySingle.length;j++){
+ arraySingle[j] = j;
+ }
+ }
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;arraySingle.length;j++){
+ chk = arraySingle[j];
+ }
+ }
+ <span class="type">System</span>.out.println(<span class="type">System</span>.currentTimeMillis<span class="literal">()</span> - start);
+
+ start = <span class="type">System</span>.currentTimeMillis<span class="literal">()</span>;
+ <span class="built_in">int</span><span class="literal">[]</span><span class="literal">[]</span> arrayDouble = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">1000</span>][<span class="number">1000</span>];
+ chk = <span class="number">0</span>;
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;arrayDouble.length;j++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> k=<span class="number">0</span>;k&lt;arrayDouble[<span class="number">0</span>].length;k++){
+ arrayDouble[i][j]=j;
+ }
+ }
+ }
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;arrayDouble.length;j++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> k=<span class="number">0</span>;k&lt;arrayDouble[<span class="number">0</span>].length;k++){
+ chk = arrayDouble[i][j];
+ }
+ }
+ }
+ <span class="type">System</span>.out.println(<span class="type">System</span>.currentTimeMillis<span class="literal">()</span> - start);
+
+ start = <span class="type">System</span>.currentTimeMillis<span class="literal">()</span>;
+ arraySingle = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">1000000</span>];
+ <span class="built_in">int</span> arraySingleSize = arraySingle.length;
+ chk = <span class="number">0</span>;
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;arraySingleSize;j++){
+ arraySingle[j] = j;
+ }
+ }
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;arraySingleSize;j++){
+ chk = arraySingle[j];
+ }
+ }
+ <span class="type">System</span>.out.println(<span class="type">System</span>.currentTimeMillis<span class="literal">()</span> - start);
+
+ start = <span class="type">System</span>.currentTimeMillis<span class="literal">()</span>;
+ arrayDouble = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">1000</span>][<span class="number">1000</span>];
+ <span class="built_in">int</span> arrayDoubleSize = arrayDouble.length;
+ <span class="built_in">int</span> firstSize = arrayDouble[<span class="number">0</span>].length;
+ chk = <span class="number">0</span>;
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;arrayDoubleSize;j++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> k=<span class="number">0</span>;k&lt;firstSize;k++){
+ arrayDouble[i][j]=j;
+ }
+ }
+ }
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;arrayDoubleSize;j++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> k=<span class="number">0</span>;k&lt;firstSize;k++){
+ chk = arrayDouble[i][j];
+ }
+ }
+ }
+ <span class="type">System</span>.out.println(<span class="type">System</span>.currentTimeMillis<span class="literal">()</span> - start);
+ }
+}
+</code></pre><p><em>清单 19. 运行结果</em></p>
+<pre><code>343
+624
+287
+390
+</code></pre><p>第一段代码操作的是一维数组的赋值、取值过程，第二段代码操作的是二维数组的赋值、取值过程。可以看到一维数组方式比二维数组方式快接近一半时间。而对于数组内如果可以减少赋值运算，则可以进一步减少运算耗时，加快程序运行速度。</p>
+<h2 id="提取表达式">提取表达式</h2><p>大部分情况下，代码的重复劳动由于计算机的高速运行，并不会对性能构成太大的威胁，但若希望将系统性能发挥到极致，还是有很多地方可以优化的。<br><em>清单 20. 提取表达式</em></p>
+<pre><code><span class="label">public</span> class duplicatedCode {
+ public static void <span class="keyword">beforeTuning(){
+</span> long start = System.currentTimeMillis()<span class="comment">;</span>
+ double <span class="literal">a1</span> = Math.random()<span class="comment">;</span>
+ double <span class="literal">a2</span> = Math.random()<span class="comment">;</span>
+ double <span class="literal">a3</span> = Math.random()<span class="comment">;</span>
+ double <span class="literal">a4</span> = Math.random()<span class="comment">;</span>
+ double <span class="keyword">b1,b2;
+</span> for(int i<span class="number">=0</span><span class="comment">;i&lt;10000000;i++){</span>
+ <span class="keyword">b1 </span>= <span class="literal">a1</span>*<span class="literal">a2</span>*<span class="literal">a4</span>/<span class="number">3</span>*<span class="number">4</span>*<span class="literal">a3</span>*<span class="literal">a4</span><span class="comment">;</span>
+ <span class="keyword">b2 </span>= <span class="literal">a1</span>*<span class="literal">a2</span>*<span class="literal">a3</span>/<span class="number">3</span>*<span class="number">4</span>*<span class="literal">a3</span>*<span class="literal">a4</span><span class="comment">;</span>
+ }
+ System.out.println(System.currentTimeMillis() - start)<span class="comment">;</span>
+ }
+
+ public static void afterTuning(){
+ long start = System.currentTimeMillis()<span class="comment">;</span>
+ double <span class="literal">a1</span> = Math.random()<span class="comment">;</span>
+ double <span class="literal">a2</span> = Math.random()<span class="comment">;</span>
+ double <span class="literal">a3</span> = Math.random()<span class="comment">;</span>
+ double <span class="literal">a4</span> = Math.random()<span class="comment">;</span>
+ double combine,<span class="keyword">b1,b2;
+</span> for(int i<span class="number">=0</span><span class="comment">;i&lt;10000000;i++){</span>
+ combine = <span class="literal">a1</span>*<span class="literal">a2</span>/<span class="number">3</span>*<span class="number">4</span>*<span class="literal">a3</span>*<span class="literal">a4</span><span class="comment">;</span>
+ <span class="keyword">b1 </span>= combine*<span class="literal">a4</span><span class="comment">;</span>
+ <span class="keyword">b2 </span>= combine*<span class="literal">a3</span><span class="comment">;</span>
+ }
+ System.out.println(System.currentTimeMillis() - start)<span class="comment">;</span>
+ }
+
+ public static void main(<span class="keyword">String[] </span>args){
+ duplicatedCode.<span class="keyword">beforeTuning();
+</span> duplicatedCode.afterTuning()<span class="comment">;</span>
+ }
+}
+</code></pre><p>运行输出如清单 21 所示。<br><em>清单 21. 运行结果</em></p>
+<pre><code>202
+110
+</code></pre><p>两段代码的差别是提取了重复的公式，使得这个公式的每次循环计算只执行一次。分别耗时 202ms 和 110ms，可见，提取复杂的重复操作是相当具有意义的。这个例子告诉我们，在循环体内，如果能够提取到循环体外的计算公式，最好提取出来，尽可能让程序少做重复的计算。</p>
+<h2 id="优化循环">优化循环</h2><p>当性能问题成为系统的主要矛盾时，可以尝试优化循环，例如减少循环次数，这样也许可以加快程序运行速度。<br><em>清单 22. 减少循环次数</em></p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> reduceLoop {
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">beforeTuning</span><span class="params">()</span></span>{
+ <span class="keyword">long</span> start = System.currentTimeMillis();
+ <span class="keyword">int</span>[] <span class="built_in">array</span> = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">9999999</span>];
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">9999999</span>;i++){
+ <span class="built_in">array</span>[i] = i;
+ }
+ System.out.println(System.currentTimeMillis() - start);
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">afterTuning</span><span class="params">()</span></span>{
+ <span class="keyword">long</span> start = System.currentTimeMillis();
+ <span class="keyword">int</span>[] <span class="built_in">array</span> = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">9999999</span>];
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">9999999</span>;i+=<span class="number">3</span>){
+ <span class="built_in">array</span>[i] = i;
+ <span class="built_in">array</span>[i+<span class="number">1</span>] = i+<span class="number">1</span>;
+ <span class="built_in">array</span>[i+<span class="number">2</span>] = i+<span class="number">2</span>;
+ }
+ System.out.println(System.currentTimeMillis() - start);
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{
+reduceLoop.beforeTuning();
+reduceLoop.afterTuning();
+}
+}
+</code></pre><p>运行输出如清单 23 所示。<br><em>清单 23. 运行结果</em></p>
+<pre><code>265
+31
+</code></pre><p>这个例子可以看出，通过减少循环次数，耗时缩短为原来的 1/8。</p>
+<h2 id="布尔运算代替位运算">布尔运算代替位运算</h2><p>虽然位运算的速度远远高于算术运算，但是在条件判断时，使用位运算替代布尔运算确实是非常错误的选择。在条件判断时，Java 会对布尔运算做相当充分的优化。假设有表达式 a、b、c 进行布尔运算“a&amp;&amp;b&amp;&amp;c”，根据逻辑与的特点，只要在整个布尔表达式中有一项返回 false，整个表达式就返回 false，因此，当表达式 a 为 false 时，该表达式将立即返回 false，而不会再去计算表达式 b 和 c。若此时，表达式 a、b、c 需要消耗大量的系统资源，这种处理方式可以节省这些计算资源。同理，当计算表达式“a||b||c”时，只要 a、b 或 c，3 个表达式其中任意一个计算结果为 true 时，整体表达式立即返回 true，而不去计算剩余表达式。简单地说，在布尔表达式的计算中，只要表达式的值可以确定，就会立即返回，而跳过剩余子表达式的计算。若使用位运算 (按位与、按位或) 代替逻辑与和逻辑或，虽然位运算本身没有性能问题，但是位运算总是要将所有的子表达式全部计算完成后，再给出最终结果。因此，从这个角度看，使用位运算替代布尔运算会使系统进行很多无效计算。<br><em>清单 24. 运算方式对比</em></p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OperationCompare</span> </span>{
+ <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">booleanOperate</span><span class="params">()</span></span>{
+ <span class="keyword">long</span> start = System.currentTimeMillis();
+ <span class="keyword">boolean</span> a = <span class="keyword">false</span>;
+ <span class="keyword">boolean</span> b = <span class="keyword">true</span>;
+ <span class="keyword">int</span> c = <span class="number">0</span>;
+ <span class="comment">//下面循环开始进行位运算，表达式里面的所有计算因子都会被用来计算</span>
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1000000</span>;i++){
+ <span class="keyword">if</span>(a&amp;b&amp;<span class="string">"Test_123"</span>.contains(<span class="string">"123"</span>)){
+ c = <span class="number">1</span>;
+ }
+ }
+ System.out.println(System.currentTimeMillis() - start);
+ }
+
+ <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bitOperate</span><span class="params">()</span></span>{
+ <span class="keyword">long</span> start = System.currentTimeMillis();
+ <span class="keyword">boolean</span> a = <span class="keyword">false</span>;
+ <span class="keyword">boolean</span> b = <span class="keyword">true</span>;
+ <span class="keyword">int</span> c = <span class="number">0</span>;
+ <span class="comment">//下面循环开始进行布尔运算，只计算表达式 a 即可满足条件</span>
+ <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1000000</span>;i++){
+ <span class="keyword">if</span>(a&amp;&amp;b&amp;&amp;<span class="string">"Test_123"</span>.contains(<span class="string">"123"</span>)){
+ c = <span class="number">1</span>;
+ }
+ }
+ System.out.println(System.currentTimeMillis() - start);
+ }
+
+ <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{
+ OperationCompare.booleanOperate();
+ OperationCompare.bitOperate();
+ }
+}
+</code></pre><p>运行输出如清单 25 所示。<br><em>清单 25. 运行结果</em></p>
+<pre><code>63
+0
+</code></pre><p>实例显示布尔计算大大优于位运算，但是，这个结果不能说明位运算比逻辑运算慢，因为在所有的逻辑与运算中，都省略了表达式“”Test_123”.contains(“123”)”的计算，而所有的位运算都没能省略这部分系统开销。</p>
+<h2 id="使用_arrayCopy()">使用 arrayCopy()</h2><p>数据复制是一项使用频率很高的功能，JDK 中提供了一个高效的 API 来实现它。System.arraycopy() 函数是 native 函数，通常 native 函数的性能要优于普通的函数，所以，仅处于性能考虑，在软件开发中，应尽可能调用 native 函数。ArrayList 和 Vector 大量使用了 System.arraycopy 来操作数据，特别是同一数组内元素的移动及不同数组之间元素的复制。arraycopy 的本质是让处理器利用一条指令处理一个数组中的多条记录，有点像汇编语言里面的串操作指令 (LODSB、LODSW、LODSB、STOSB、STOSW、STOSB)，只需指定头指针，然后开始循环即可，即执行一次指令，指针就后移一个位置，操作多少数据就循环多少次。如果在应用程序中需要进行数组复制，应该使用这个函数，而不是自己实现。具体应用如清单 26 所示。<br><em>清单 26. 复制数据例子</em></p>
+<pre><code><span class="keyword">public</span> class arrayCopyTest {
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="built_in">arrayCopy</span>(){
+<span class="built_in">int</span> <span class="built_in">size</span> = <span class="number">10000000</span>;
+ <span class="built_in">int</span>[] array = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="built_in">size</span>];
+ <span class="built_in">int</span>[] arraydestination = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="built_in">size</span>];
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;array.length;i++){
+ array[i] = i;
+ }
+ <span class="keyword">long</span> start = System.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&gt;<span class="number">1000</span>;j++){
+ System.arraycopy(array, <span class="number">0</span>, arraydestination, <span class="number">0</span>, <span class="built_in">size</span>);<span class="comment">//使用 System 级别的本地 arraycopy 方式</span>
+ }
+ System.out.<span class="built_in">println</span>(System.currentTimeMillis() - start);
+}
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> arrayCopySelf(){
+<span class="built_in">int</span> <span class="built_in">size</span> = <span class="number">10000000</span>;
+ <span class="built_in">int</span>[] array = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="built_in">size</span>];
+ <span class="built_in">int</span>[] arraydestination = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="built_in">size</span>];
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;array.length;i++){
+ array[i] = i;
+ }
+ <span class="keyword">long</span> start = System.currentTimeMillis();
+ <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1000</span>;i++){
+ <span class="keyword">for</span>(<span class="built_in">int</span> j=<span class="number">0</span>;j&lt;<span class="built_in">size</span>;j++){
+ arraydestination[j] = array[j];<span class="comment">//自己实现的方式，采用数组的数据互换方式</span>
+ }
+ }
+ System.out.<span class="built_in">println</span>(System.currentTimeMillis() - start);
+}
+
+ <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args){
+ arrayCopyTest.<span class="built_in">arrayCopy</span>();
+ arrayCopyTest.arrayCopySelf();
+ }
+}
+</code></pre><p>输出如清单 27 所示。<br><em>清单 27. 运行结果</em></p>
+<pre><code>0
+23166
+</code></pre><p>上面的例子显示采用 arraycopy 方法执行复制会非常的快。原因就在于 arraycopy 属于本地方法，源代码如清单 28 所示。<br><em>清单 28.arraycopy 方法</em></p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> arraycopy(<span class="keyword">Object</span> src, <span class="built_in">int</span> srcPos, 
+<span class="keyword">Object</span> dest, <span class="built_in">int</span> destPos, 
+<span class="built_in">int</span> length);
+</code></pre><p>src - 源数组；srcPos - 源数组中的起始位置； dest - 目标数组；destPos - 目标数据中的起始位置；length - 要复制的数组元素的数量。清单 28 所示方法使用了 native 关键字，调用的为 C++编写的底层函数，可见其为 JDK 中的底层函数。</p>
+<p>Reference:<a href="http://www.ibm.com/developerworks/cn/java/j-lo-basic-types/index.html" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/java/j-lo-basic-types/index.html</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Study-Notes/">Study Notes</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/06/17/java-string-optimization/" data-title="Java 程序优化：字符串操作、基本运算方法等优化策略 | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/17/proxy-pattern/"  title="代理模式">
+ <strong>下一篇：</strong><br/> 
+ <span>代理模式
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+    <!-- ��˵���ۿ� start -->
+    <div class="ds-thread" data-thread-key="2015/06/17/java-string-optimization/" data-title="Java 程序优化：字符串操作、基本运算方法等优化策略" data-url="http://yoursite.com/2015/06/17/java-string-optimization/"></div>
+    <!-- ��˵���ۿ� end -->
+    <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'undefined'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      <!-- ��˵����JS���� end -->
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Design-Pattern/" title="Design Pattern">Design Pattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Study-Notes/" title="Study Notes">Study Notes<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/springmvc/" title="springmvc">springmvc<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/singleton/" title="singleton">singleton<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/proxy/" title="proxy">proxy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HashMap/" title="HashMap">HashMap<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p>  不乱于心，不困于情！ <br/>
+			不畏将来，不念过往！</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2692340043" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SurperSniper" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:surpersniper1992@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="lmg">lmg</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SuperSniper"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fnull' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -4,38 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>hadoop 2.x 基础 | Zzzz</title>
+    <title>ArrayList-and-LinkedList | Zzzz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="lmg">
     
 
     
-    <meta name="description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
-
-YARN（云操作系统） 模块功能Reso">
+    <meta name="description" content="SummaryLinkedeList和ArrayList都实现了List接口，但是它们的工作原理却不一样。它们之间最主要的区别在于ArrayList是可改变大小的数组，而LinkedList是双向链接串列(doubly LinkedList)。ArrayList更受欢迎，很多场景下ArrayList比LinkedList更为适用。这篇文章中我们将会看看LinkedeList和ArrayList的不">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hadoop 2.x 基础">
-<meta property="og:url" content="http://yoursite.com/2015/06/14/hadoop-info/index.html">
+<meta property="og:title" content="ArrayList-and-LinkedList">
+<meta property="og:url" content="http://yoursite.com/2015/06/17/ArrayList-and-LinkedList/index.html">
 <meta property="og:site_name" content="Zzzz">
-<meta property="og:description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
-
-YARN（云操作系统） 模块功能Reso">
-<meta property="og:updated_time" content="2015-06-15T03:12:27.612Z">
+<meta property="og:description" content="SummaryLinkedeList和ArrayList都实现了List接口，但是它们的工作原理却不一样。它们之间最主要的区别在于ArrayList是可改变大小的数组，而LinkedList是双向链接串列(doubly LinkedList)。ArrayList更受欢迎，很多场景下ArrayList比LinkedList更为适用。这篇文章中我们将会看看LinkedeList和ArrayList的不">
+<meta property="og:updated_time" content="2015-06-17T05:45:27.223Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hadoop 2.x 基础">
-<meta name="twitter:description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
-
-YARN（云操作系统） 模块功能Reso">
+<meta name="twitter:title" content="ArrayList-and-LinkedList">
+<meta name="twitter:description" content="SummaryLinkedeList和ArrayList都实现了List接口，但是它们的工作原理却不一样。它们之间最主要的区别在于ArrayList是可改变大小的数组，而LinkedList是双向链接串列(doubly LinkedList)。ArrayList更受欢迎，很多场景下ArrayList比LinkedList更为适用。这篇文章中我们将会看看LinkedeList和ArrayList的不">
 
     
     <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
@@ -94,14 +79,14 @@ YARN（云操作系统） 模块功能Reso">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/14/hadoop-info/" title="hadoop 2.x 基础" itemprop="url">hadoop 2.x 基础</a>
+      <a href="/2015/06/17/ArrayList-and-LinkedList/" title="ArrayList-and-LinkedList" itemprop="url">ArrayList-and-LinkedList</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-14T06:33:04.000Z" itemprop="datePublished"> 发表于 2015-06-14</time>
+    <time datetime="2015-06-17T02:41:52.000Z" itemprop="datePublished"> 发表于 2015-06-17</time>
     
   </p>
 </header>
@@ -110,71 +95,24 @@ YARN（云操作系统） 模块功能Reso">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HDFS_模块功能"><span class="toc-number">1.</span> <span class="toc-text">HDFS 模块功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#YARN（云操作系统）_模块功能"><span class="toc-number">2.</span> <span class="toc-text">YARN（云操作系统） 模块功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#离线计算框架MapReduce"><span class="toc-number">3.</span> <span class="toc-text">离线计算框架MapReduce</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Summary"><span class="toc-number">1.</span> <span class="toc-text">Summary</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LinkedList和ArrayList的区别"><span class="toc-number">2.</span> <span class="toc-text">LinkedList和ArrayList的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#什么场景下更适宜使用LinkedList，而不用ArrayList"><span class="toc-number">3.</span> <span class="toc-text">什么场景下更适宜使用LinkedList，而不用ArrayList</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="HDFS_模块功能">HDFS 模块功能</h1><ul>
-<li>NameNode为主节点，<strong>存储文件的元数据</strong>如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。</li>
-<li>DataNode在本地文件系统<strong>存储文件块数据，以及块数据的校验和</strong>。</li>
-<li>Secondary NameNode用来<strong>监控HDFS状态的辅助后台程序</strong>，每隔一段时间<strong>获取HDFS元数据的快照</strong>。</li>
-</ul>
-<h1 id="YARN（云操作系统）_模块功能">YARN（云操作系统） 模块功能</h1><p>ResourceManager</p>
-<blockquote>
-<ul>
-<li>处理客户端请求</li>
-<li>启动/监控ApplicationMaster</li>
-<li>监控NodeManager</li>
-<li>资源分配与调度</li>
-</ul>
-</blockquote>
-<p>NodeManager</p>
-<blockquote>
-<ul>
-<li>单个节点上的资源管理</li>
-<li>处理来自ResourceManager的命令</li>
-<li>处理来自ApplicationMaster的命令</li>
-</ul>
-</blockquote>
-<p>ApplicationMaster</p>
-<blockquote>
-<ul>
-<li>数据切分</li>
-<li>为应用程序申请资源，并分配给内部任务</li>
-<li>任务监控与容错</li>
-</ul>
-</blockquote>
-<p>Container</p>
-<blockquote>
-<p>-对任务进行环境的抽象，封装了cpu、内存等多维资源以及环境变量、启动命令等任务运行相关的信息</p>
-</blockquote>
-<h1 id="离线计算框架MapReduce">离线计算框架MapReduce</h1><p>将计算过程分为两个阶段，Map和Reduce</p>
-<blockquote>
-<ul>
-<li>Map阶段并行处理输入数据</li>
-<li>Reduce阶段对Map结果进行汇总</li>
-</ul>
-</blockquote>
-<p>Shuffle连接Map和Reduce两个阶段</p>
-<blockquote>
-<ul>
-<li>Map Task将数据写到本地磁盘</li>
-<li>Reduce Task从每个Map Task上读取一份数据</li>
-</ul>
-</blockquote>
-<p>仅适合离线批处理</p>
-<blockquote>
-<ul>
-<li>具有很好的容错性和扩展性</li>
-<li>适合简单的批处理任务</li>
-</ul>
-</blockquote>
-<p>缺点明显</p>
-<blockquote>
-<ul>
-<li>启动开销大、过多使用磁盘导致效率低下等</li>
-</ul>
-</blockquote>
+		<h1 id="Summary">Summary</h1><p>LinkedeList和ArrayList都实现了List接口，但是它们的工作原理却不一样。它们之间最主要的区别在于ArrayList是可改变大小的数组，而LinkedList是双向链接串列(doubly LinkedList)。ArrayList更受欢迎，很多场景下ArrayList比LinkedList更为适用。这篇文章中我们将会看看LinkedeList和ArrayList的不同，而且我们试图来看看什么场景下更适宜使用LinkedList，而不用ArrayList。</p>
+<h1 id="LinkedList和ArrayList的区别">LinkedList和ArrayList的区别</h1><p>LinkedList和ArrayList的差别主要来自于Array和LinkedList数据结构的不同。如果你很熟悉Array和LinkedList，你很容易得出下面的结论：</p>
+<ol>
+<li>因为Array是基于索引(index)的数据结构，它使用索引在数组中搜索和读取数据是很快的。Array获取数据的时间复杂度是O(1),但是要删除数据却是开销很大的，因为这需要重排数组中的所有数据。</li>
+<li>相对于ArrayList，LinkedList插入是更快的。因为LinkedList不像ArrayList一样，不需要改变数组的大小，也不需要在数组装满的时候要将所有的数据重新装入一个新的数组，这是ArrayList最坏的一种情况，时间复杂度是O(n)，而LinkedList中插入或删除的时间复杂度仅为O(1)。ArrayList在插入数据时还需要更新索引（除了插入数组的尾部）。</li>
+<li>类似于插入数据，删除数据时，LinkedList也优于ArrayList。</li>
+<li>LinkedList需要更多的内存，因为ArrayList的每个索引的位置是实际的数据，而LinkedList中的每个节点中存储的是实际的数据和前后节点的位置。</li>
+</ol>
+<h1 id="什么场景下更适宜使用LinkedList，而不用ArrayList">什么场景下更适宜使用LinkedList，而不用ArrayList</h1><ol>
+<li>你的应用不会随机访问数据。因为如果你需要LinkedList中的第n个元素的时候，你需要从第一个元素顺序数到第n个数据，然后读取数据。</li>
+<li>你的应用更多的插入和删除元素，更少的读取数据。因为插入和删除元素不涉及重排数据，所以它要比ArrayList要快。</li>
+</ol>
+<p>你需要一个不同步的基于索引的数据访问时，请尽量使用ArrayList。ArrayList很快，也很容易使用。但是要记得要给定一个合适的初始大小，尽可能的减少更改数组的大小。</p>
+<p><strong>Reference</strong>：<a href="http://blog.csdn.net/jason0539" target="_blank" rel="external">http://blog.csdn.net/jason0539</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -188,7 +126,7 @@ YARN（云操作系统） 模块功能Reso">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -197,7 +135,7 @@ YARN（云操作系统） 模块功能Reso">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/06/14/hadoop-info/" data-title="hadoop 2.x 基础 | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/06/17/ArrayList-and-LinkedList/" data-title="ArrayList-and-LinkedList | Zzzz" data-tsina="2692340043" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -211,18 +149,18 @@ YARN（云操作系统） 模块功能Reso">
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/06/15/HashMap/" title="HashMap">
+ <a href="/2015/06/17/proxy-pattern/" title="代理模式">
   <strong>上一篇：</strong><br/>
   <span>
-  HashMap</span>
+  代理模式</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/06/10/linux-order/"  title="Linux 常用命令">
+<a href="/2015/06/17/singleton-pattern/"  title="单例模式">
  <strong>下一篇：</strong><br/> 
- <span>Linux 常用命令
+ <span>单例模式
 </span>
 </a>
 </div>
@@ -232,7 +170,7 @@ YARN（云操作系统） 模块功能Reso">
 	
 <section id="comments" class="comment">
     <!-- ��˵���ۿ� start -->
-    <div class="ds-thread" data-thread-key="2015/06/14/hadoop-info/" data-title="hadoop 2.x 基础" data-url="http://yoursite.com/2015/06/14/hadoop-info/"></div>
+    <div class="ds-thread" data-thread-key="2015/06/17/ArrayList-and-LinkedList/" data-title="ArrayList-and-LinkedList" data-url="http://yoursite.com/2015/06/17/ArrayList-and-LinkedList/"></div>
     <!-- ��˵���ۿ� end -->
     <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
     <script type="text/javascript">
