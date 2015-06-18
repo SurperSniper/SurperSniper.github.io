@@ -17,7 +17,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/06/17/singleton-pattern/index.html">
 <meta property="og:site_name" content="Zzzz">
 <meta property="og:description" content="二次世界大战的时候，我国有一个著名的战役叫“长沙保卫战”，中国军队指挥官薛岳将军率领第 9 战区十余万将士，通过所谓的“焦土”战术 4 次瓦解日军的大规模进攻，给对当时的国民党政府打了一针强心剂。这四次战役中最让人我难忘的一幕是，面对单兵战斗力是中国军队 5 倍的日军，人数上虽然占据一定优势，但是只有第 10 军和第 74 军两只军队装备了现代化的军械，其余军队都是“汉阳造”的落后装备。薛将军命令">
-<meta property="og:updated_time" content="2015-06-17T06:40:59.632Z">
+<meta property="og:updated_time" content="2015-06-18T08:07:31.285Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单例模式">
 <meta name="twitter:description" content="二次世界大战的时候，我国有一个著名的战役叫“长沙保卫战”，中国军队指挥官薛岳将军率领第 9 战区十余万将士，通过所谓的“焦土”战术 4 次瓦解日军的大规模进攻，给对当时的国民党政府打了一针强心剂。这四次战役中最让人我难忘的一幕是，面对单兵战斗力是中国军队 5 倍的日军，人数上虽然占据一定优势，但是只有第 10 军和第 74 军两只军队装备了现代化的军械，其余军队都是“汉阳造”的落后装备。薛将军命令">
@@ -163,9 +163,25 @@
  <span class="keyword"> private</span><span class="keyword"> static</span> SingletonClass<span class="instruction"> instance </span>= null; 
 
  <span class="keyword"> public</span><span class="keyword"> static</span> SingletonClass<span class="function"> getInstance(</span><span class="function">)</span> { 
+    /*
+     * 这种实现进行了两次instance==null的判断，这便是单例模式的双检锁。
+     * 第一次检查是说如果对象实例已经被创建了，则直接返回，不需要再进入同步代码。
+     * 否则就开始同步线程，进入临界区后，进行的第二次检查是说：
+     * 如果被同步的线程有一个创建了对象实例， 其它的线程就不必再创建实例了。
+     */
    <span class="instruction"> if </span>(instance == null<span class="function">)</span> { 
       synchronized<span class="function"> (</span>SingletonClass.class<span class="function">)</span> { 
        <span class="instruction"> if </span>(instance == null<span class="function">)</span> { 
+        /*
+         * 仍然存在的问题：下面这句代码并不是一个原子操作，JVM在执行这行代码时，会分解成如下的操作：
+         * 1.给instance分配内存，在栈中分配并初始化为null
+         * 2.调用Singleton_1的构造函数，生成对象实例，在堆中分配 
+         * 3.把instance指向在堆中分配的对象
+         * 由于指令重排序优化，执行顺序可能会变成1，3，2，
+         * 那么当一个线程执行完1，3之后，被另一个线程抢占，
+         * 这时instance已经不是null了，就会直接返回。
+         * 然而2还没有执行过，也就是说这个对象实例还没有初始化过。
+         */
          <span class="instruction"> instance </span>=<span class="instruction"> new </span>SingletonClass(<span class="function">)</span>; 
         } 
       } 
@@ -292,7 +308,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Study-Notes/" title="Study Notes">Study Notes<sup>7</sup></a></li>
+			<li><a href="/categories/Study-Notes/" title="Study Notes">Study Notes<sup>10</sup></a></li>
 		  
 		
 		</ul>
@@ -305,7 +321,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>3</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>5</sup></a></li>
 			
 		
 			
@@ -330,6 +346,14 @@
 		
 			
 				<li><a href="/tags/HashMap/" title="HashMap">HashMap<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Tcp-Ip/" title="Tcp/Ip">Tcp/Ip<sup>1</sup></a></li>
+			
+		
+			
+		
 			
 		
 		</ul>

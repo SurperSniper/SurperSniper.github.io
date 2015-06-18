@@ -4,38 +4,36 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>hadoop 2.x 基础 | Zzzz</title>
+    <title>TCP/IP | Zzzz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="lmg">
     
 
     
-    <meta name="description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
+    <meta name="description" content="TCP/IP连接三次握手在TCP/IP协议中，TCP协议提供可靠的连接服务，采用三次握手建立一个连接。
 
-YARN（云操作系统） 模块功能Reso">
+建立连接时，客户端发送syn包(syn=x)到服务器，并进入SYN_SEND状态，等待服务器确认；
+服务器收到syn包，必须确认客户的SYN（ack=x+1），同时自己也发送一个SYN包（syn=y），即SYN+ACK包，此时服务器进入SYN_RECV状态；
+客户端收到服务器的SYN＋ACK包">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hadoop 2.x 基础">
-<meta property="og:url" content="http://yoursite.com/2015/06/14/hadoop-info/index.html">
+<meta property="og:title" content="TCP/IP">
+<meta property="og:url" content="http://yoursite.com/2015/06/18/tcp-ip/index.html">
 <meta property="og:site_name" content="Zzzz">
-<meta property="og:description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
+<meta property="og:description" content="TCP/IP连接三次握手在TCP/IP协议中，TCP协议提供可靠的连接服务，采用三次握手建立一个连接。
 
-YARN（云操作系统） 模块功能Reso">
-<meta property="og:updated_time" content="2015-06-15T03:12:27.612Z">
+建立连接时，客户端发送syn包(syn=x)到服务器，并进入SYN_SEND状态，等待服务器确认；
+服务器收到syn包，必须确认客户的SYN（ack=x+1），同时自己也发送一个SYN包（syn=y），即SYN+ACK包，此时服务器进入SYN_RECV状态；
+客户端收到服务器的SYN＋ACK包">
+<meta property="og:image" content="http://7xjkgu.com1.z0.glb.clouddn.com/image/TCP-IP.jpg">
+<meta property="og:updated_time" content="2015-06-18T09:54:59.382Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hadoop 2.x 基础">
-<meta name="twitter:description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
+<meta name="twitter:title" content="TCP/IP">
+<meta name="twitter:description" content="TCP/IP连接三次握手在TCP/IP协议中，TCP协议提供可靠的连接服务，采用三次握手建立一个连接。
 
-YARN（云操作系统） 模块功能Reso">
+建立连接时，客户端发送syn包(syn=x)到服务器，并进入SYN_SEND状态，等待服务器确认；
+服务器收到syn包，必须确认客户的SYN（ack=x+1），同时自己也发送一个SYN包（syn=y），即SYN+ACK包，此时服务器进入SYN_RECV状态；
+客户端收到服务器的SYN＋ACK包">
 
     
     <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
@@ -94,14 +92,14 @@ YARN（云操作系统） 模块功能Reso">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/14/hadoop-info/" title="hadoop 2.x 基础" itemprop="url">hadoop 2.x 基础</a>
+      <a href="/2015/06/18/tcp-ip/" title="TCP/IP" itemprop="url">TCP/IP</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-14T06:33:04.000Z" itemprop="datePublished"> 发表于 2015-06-14</time>
+    <time datetime="2015-06-18T06:45:16.000Z" itemprop="datePublished"> 发表于 2015-06-18</time>
     
   </p>
 </header>
@@ -110,71 +108,23 @@ YARN（云操作系统） 模块功能Reso">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HDFS_模块功能"><span class="toc-number">1.</span> <span class="toc-text">HDFS 模块功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#YARN（云操作系统）_模块功能"><span class="toc-number">2.</span> <span class="toc-text">YARN（云操作系统） 模块功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#离线计算框架MapReduce"><span class="toc-number">3.</span> <span class="toc-text">离线计算框架MapReduce</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP/IP连接三次握手"><span class="toc-number">1.</span> <span class="toc-text">TCP/IP连接三次握手</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP/IP断开四次握手"><span class="toc-number">2.</span> <span class="toc-text">TCP/IP断开四次握手</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="HDFS_模块功能">HDFS 模块功能</h1><ul>
-<li>NameNode为主节点，<strong>存储文件的元数据</strong>如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。</li>
-<li>DataNode在本地文件系统<strong>存储文件块数据，以及块数据的校验和</strong>。</li>
-<li>Secondary NameNode用来<strong>监控HDFS状态的辅助后台程序</strong>，每隔一段时间<strong>获取HDFS元数据的快照</strong>。</li>
-</ul>
-<h1 id="YARN（云操作系统）_模块功能">YARN（云操作系统） 模块功能</h1><p>ResourceManager</p>
-<blockquote>
-<ul>
-<li>处理客户端请求</li>
-<li>启动/监控ApplicationMaster</li>
-<li>监控NodeManager</li>
-<li>资源分配与调度</li>
-</ul>
-</blockquote>
-<p>NodeManager</p>
-<blockquote>
-<ul>
-<li>单个节点上的资源管理</li>
-<li>处理来自ResourceManager的命令</li>
-<li>处理来自ApplicationMaster的命令</li>
-</ul>
-</blockquote>
-<p>ApplicationMaster</p>
-<blockquote>
-<ul>
-<li>数据切分</li>
-<li>为应用程序申请资源，并分配给内部任务</li>
-<li>任务监控与容错</li>
-</ul>
-</blockquote>
-<p>Container</p>
-<blockquote>
-<p>-对任务进行环境的抽象，封装了cpu、内存等多维资源以及环境变量、启动命令等任务运行相关的信息</p>
-</blockquote>
-<h1 id="离线计算框架MapReduce">离线计算框架MapReduce</h1><p>将计算过程分为两个阶段，Map和Reduce</p>
-<blockquote>
-<ul>
-<li>Map阶段并行处理输入数据</li>
-<li>Reduce阶段对Map结果进行汇总</li>
-</ul>
-</blockquote>
-<p>Shuffle连接Map和Reduce两个阶段</p>
-<blockquote>
-<ul>
-<li>Map Task将数据写到本地磁盘</li>
-<li>Reduce Task从每个Map Task上读取一份数据</li>
-</ul>
-</blockquote>
-<p>仅适合离线批处理</p>
-<blockquote>
-<ul>
-<li>具有很好的容错性和扩展性</li>
-<li>适合简单的批处理任务</li>
-</ul>
-</blockquote>
-<p>缺点明显</p>
-<blockquote>
-<ul>
-<li>启动开销大、过多使用磁盘导致效率低下等</li>
-</ul>
-</blockquote>
+		<h1 id="TCP/IP连接三次握手">TCP/IP连接三次握手</h1><p>在TCP/IP协议中，TCP协议提供可靠的连接服务，采用三次握手建立一个连接。</p>
+<ol>
+<li>建立连接时，客户端发送syn包(syn=x)到服务器，并进入SYN_SEND状态，等待服务器确认；</li>
+<li>服务器收到syn包，必须确认客户的SYN（ack=x+1），同时自己也发送一个SYN包（syn=y），即SYN+ACK包，此时服务器进入SYN_RECV状态；</li>
+<li>客户端收到服务器的SYN＋ACK包，向服务器发送确认包ACK(ack=y+1)，此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手。</li>
+</ol>
+<p><img src="http://7xjkgu.com1.z0.glb.clouddn.com/image/TCP-IP.jpg" alt=""></p>
+<h1 id="TCP/IP断开四次握手">TCP/IP断开四次握手</h1><ol>
+<li>Client发送一个FIN，用来关闭Client到Server的数据传送，Client进入FIN_WAIT_1状态。</li>
+<li>Server收到FIN后，发送一个ACK给Client，确认序号为收到序号+1（与SYN相同，一个FIN占用一个序号），Server进入CLOSE_WAIT状态。</li>
+<li>Server发送一个FIN，用来关闭Server到Client的数据传送，Server进入LAST_ACK状态。</li>
+<li>Client收到FIN后，Client进入TIME_WAIT状态，接着发送一个ACK给Server，确认序号为收到序号+1，Server进入CLOSED状态，完成四次挥手。</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -188,7 +138,7 @@ YARN（云操作系统） 模块功能Reso">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  <span></span> <a href="/tags/Tcp-Ip/">Tcp/Ip</a>
   </div>
 
 </div>
@@ -197,7 +147,7 @@ YARN（云操作系统） 模块功能Reso">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/06/14/hadoop-info/" data-title="hadoop 2.x 基础 | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/06/18/tcp-ip/" data-title="TCP/IP | Zzzz" data-tsina="2692340043" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -211,18 +161,18 @@ YARN（云操作系统） 模块功能Reso">
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/06/15/HashMap/" title="HashMap">
+ <a href="/2015/06/18/java-memory-model/" title="Java内存模型">
   <strong>上一篇：</strong><br/>
   <span>
-  HashMap</span>
+  Java内存模型</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/06/10/linux-order/"  title="Linux 常用命令">
+<a href="/2015/06/17/java-string-optimization/"  title="Java 程序优化：字符串操作、基本运算方法等优化策略">
  <strong>下一篇：</strong><br/> 
- <span>Linux 常用命令
+ <span>Java 程序优化：字符串操作、基本运算方法等优化策略
 </span>
 </a>
 </div>
@@ -232,7 +182,7 @@ YARN（云操作系统） 模块功能Reso">
 	
 <section id="comments" class="comment">
     <!-- ��˵���ۿ� start -->
-    <div class="ds-thread" data-thread-key="2015/06/14/hadoop-info/" data-title="hadoop 2.x 基础" data-url="http://yoursite.com/2015/06/14/hadoop-info/"></div>
+    <div class="ds-thread" data-thread-key="2015/06/18/tcp-ip/" data-title="TCP/IP" data-url="http://yoursite.com/2015/06/18/tcp-ip/"></div>
     <!-- ��˵���ۿ� end -->
     <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
     <script type="text/javascript">

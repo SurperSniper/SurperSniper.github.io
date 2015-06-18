@@ -4,38 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>hadoop 2.x 基础 | Zzzz</title>
+    <title>java静态代码块、初始化块和构造方法的执行顺序 | Zzzz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="lmg">
     
 
     
-    <meta name="description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
-
-YARN（云操作系统） 模块功能Reso">
+    <meta name="description" content="分析:当执行new Child()时，它首先去看父类里面有没有静态代码块，如果有，它先去执行父类里面静态代码块里面的内容，当父类的静态代码块里面的内容执行完毕之后，接着去执行子类(自己这个类)里面的静态代码块，当子类的静态代码块执行完毕之后，它接着又去看父类有没有非静态代码块，如果有就执行父类的非静态代码块，父类的非静态代码块执行完毕，接着执行父类的构造方法；父类的构造方法执行完毕之后，它接着去看">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hadoop 2.x 基础">
-<meta property="og:url" content="http://yoursite.com/2015/06/14/hadoop-info/index.html">
+<meta property="og:title" content="java静态代码块、初始化块和构造方法的执行顺序">
+<meta property="og:url" content="http://yoursite.com/2015/06/18/java-object-init-sequence/index.html">
 <meta property="og:site_name" content="Zzzz">
-<meta property="og:description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
-
-YARN（云操作系统） 模块功能Reso">
-<meta property="og:updated_time" content="2015-06-15T03:12:27.612Z">
+<meta property="og:description" content="分析:当执行new Child()时，它首先去看父类里面有没有静态代码块，如果有，它先去执行父类里面静态代码块里面的内容，当父类的静态代码块里面的内容执行完毕之后，接着去执行子类(自己这个类)里面的静态代码块，当子类的静态代码块执行完毕之后，它接着又去看父类有没有非静态代码块，如果有就执行父类的非静态代码块，父类的非静态代码块执行完毕，接着执行父类的构造方法；父类的构造方法执行完毕之后，它接着去看">
+<meta property="og:updated_time" content="2015-06-18T09:55:14.892Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hadoop 2.x 基础">
-<meta name="twitter:description" content="HDFS 模块功能
-NameNode为主节点，存储文件的元数据如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。
-DataNode在本地文件系统存储文件块数据，以及块数据的校验和。
-Secondary NameNode用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照。
-
-YARN（云操作系统） 模块功能Reso">
+<meta name="twitter:title" content="java静态代码块、初始化块和构造方法的执行顺序">
+<meta name="twitter:description" content="分析:当执行new Child()时，它首先去看父类里面有没有静态代码块，如果有，它先去执行父类里面静态代码块里面的内容，当父类的静态代码块里面的内容执行完毕之后，接着去执行子类(自己这个类)里面的静态代码块，当子类的静态代码块执行完毕之后，它接着又去看父类有没有非静态代码块，如果有就执行父类的非静态代码块，父类的非静态代码块执行完毕，接着执行父类的构造方法；父类的构造方法执行完毕之后，它接着去看">
 
     
     <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
@@ -94,14 +79,14 @@ YARN（云操作系统） 模块功能Reso">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/14/hadoop-info/" title="hadoop 2.x 基础" itemprop="url">hadoop 2.x 基础</a>
+      <a href="/2015/06/18/java-object-init-sequence/" title="java静态代码块、初始化块和构造方法的执行顺序" itemprop="url">java静态代码块、初始化块和构造方法的执行顺序</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-14T06:33:04.000Z" itemprop="datePublished"> 发表于 2015-06-14</time>
+    <time datetime="2015-06-18T09:14:01.000Z" itemprop="datePublished"> 发表于 2015-06-18</time>
     
   </p>
 </header>
@@ -110,71 +95,14 @@ YARN（云操作系统） 模块功能Reso">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HDFS_模块功能"><span class="toc-number">1.</span> <span class="toc-text">HDFS 模块功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#YARN（云操作系统）_模块功能"><span class="toc-number">2.</span> <span class="toc-text">YARN（云操作系统） 模块功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#离线计算框架MapReduce"><span class="toc-number">3.</span> <span class="toc-text">离线计算框架MapReduce</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h1 id="HDFS_模块功能">HDFS 模块功能</h1><ul>
-<li>NameNode为主节点，<strong>存储文件的元数据</strong>如文件名，文件目录结构，文件属性（生成时间，副本数，文件权限），以及每个文件的块列表和块所在的DataNode等。</li>
-<li>DataNode在本地文件系统<strong>存储文件块数据，以及块数据的校验和</strong>。</li>
-<li>Secondary NameNode用来<strong>监控HDFS状态的辅助后台程序</strong>，每隔一段时间<strong>获取HDFS元数据的快照</strong>。</li>
-</ul>
-<h1 id="YARN（云操作系统）_模块功能">YARN（云操作系统） 模块功能</h1><p>ResourceManager</p>
-<blockquote>
-<ul>
-<li>处理客户端请求</li>
-<li>启动/监控ApplicationMaster</li>
-<li>监控NodeManager</li>
-<li>资源分配与调度</li>
-</ul>
-</blockquote>
-<p>NodeManager</p>
-<blockquote>
-<ul>
-<li>单个节点上的资源管理</li>
-<li>处理来自ResourceManager的命令</li>
-<li>处理来自ApplicationMaster的命令</li>
-</ul>
-</blockquote>
-<p>ApplicationMaster</p>
-<blockquote>
-<ul>
-<li>数据切分</li>
-<li>为应用程序申请资源，并分配给内部任务</li>
-<li>任务监控与容错</li>
-</ul>
-</blockquote>
-<p>Container</p>
-<blockquote>
-<p>-对任务进行环境的抽象，封装了cpu、内存等多维资源以及环境变量、启动命令等任务运行相关的信息</p>
-</blockquote>
-<h1 id="离线计算框架MapReduce">离线计算框架MapReduce</h1><p>将计算过程分为两个阶段，Map和Reduce</p>
-<blockquote>
-<ul>
-<li>Map阶段并行处理输入数据</li>
-<li>Reduce阶段对Map结果进行汇总</li>
-</ul>
-</blockquote>
-<p>Shuffle连接Map和Reduce两个阶段</p>
-<blockquote>
-<ul>
-<li>Map Task将数据写到本地磁盘</li>
-<li>Reduce Task从每个Map Task上读取一份数据</li>
-</ul>
-</blockquote>
-<p>仅适合离线批处理</p>
-<blockquote>
-<ul>
-<li>具有很好的容错性和扩展性</li>
-<li>适合简单的批处理任务</li>
-</ul>
-</blockquote>
-<p>缺点明显</p>
-<blockquote>
-<ul>
-<li>启动开销大、过多使用磁盘导致效率低下等</li>
-</ul>
-</blockquote>
+		<p>分析:当执行new Child()时，它首先去看父类里面有没有静态代码块，如果有，它先去执行父类里面静态代码块里面的内容，当父类的静态代码块里面的内容执行完毕之后，接着去执行子类(自己这个类)里面的静态代码块，当子类的静态代码块执行完毕之后，它接着又去看父类有没有非静态代码块，如果有就执行父类的非静态代码块，父类的非静态代码块执行完毕，接着执行父类的构造方法；父类的构造方法执行完毕之后，它接着去看子类有没有非静态代码块，如果有就执行子类的非静态代码块。子类的非静态代码块执行完毕再去执行子类的构造方法，这个就是一个对象的初始化顺序。 </p>
+<p>总结:对象的初始化顺序:首先执行父类静态的内容，父类静态的内容执行完毕后，接着去执行子类的静态的内容，当子类的静态内容执行完毕之后，再去看父类有没有非静态代码块，如果有就执行父类的非静态代码块，父类的非静态代码块执行完毕，接着执行父类的构造方法；父类的构造方法执行完毕之后，它接着去看子类有没有非静态代码块，如果有就执行子类的非静态代码块。子类的非静态代码块执行完毕再去执行子类的构造方法。总之一句话，静态代码块内容先执行，接着执行父类非静态代码块和构造方法，然后执行子类非静态代码块和构造方法。 </p>
+<p>注意:子类的构造方法，不管这个构造方法带不带参数，默认的它都会先去寻找父类的不带参数的构造方法。如果父类没有不带参数的构造方法，那么子类必须用supper关键子来调用父类带参数的构造方法，否则编译不能通过。</p>
+<p>Reference:<a href="http://892848153.iteye.com/blog/1980964" target="_blank" rel="external">http://892848153.iteye.com/blog/1980964</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -188,7 +116,7 @@ YARN（云操作系统） 模块功能Reso">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -197,7 +125,7 @@ YARN（云操作系统） 模块功能Reso">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/06/14/hadoop-info/" data-title="hadoop 2.x 基础 | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/06/18/java-object-init-sequence/" data-title="java静态代码块、初始化块和构造方法的执行顺序 | Zzzz" data-tsina="2692340043" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -210,19 +138,11 @@ YARN（云操作系统） 模块功能Reso">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/06/15/HashMap/" title="HashMap">
-  <strong>上一篇：</strong><br/>
-  <span>
-  HashMap</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/06/10/linux-order/"  title="Linux 常用命令">
+<a href="/2015/06/18/java-memory-model/"  title="Java内存模型">
  <strong>下一篇：</strong><br/> 
- <span>Linux 常用命令
+ <span>Java内存模型
 </span>
 </a>
 </div>
@@ -232,7 +152,7 @@ YARN（云操作系统） 模块功能Reso">
 	
 <section id="comments" class="comment">
     <!-- ��˵���ۿ� start -->
-    <div class="ds-thread" data-thread-key="2015/06/14/hadoop-info/" data-title="hadoop 2.x 基础" data-url="http://yoursite.com/2015/06/14/hadoop-info/"></div>
+    <div class="ds-thread" data-thread-key="2015/06/18/java-object-init-sequence/" data-title="java静态代码块、初始化块和构造方法的执行顺序" data-url="http://yoursite.com/2015/06/18/java-object-init-sequence/"></div>
     <!-- ��˵���ۿ� end -->
     <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
     <script type="text/javascript">
