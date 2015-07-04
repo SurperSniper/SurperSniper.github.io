@@ -4,23 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>ArrayList-and-LinkedList | Zzzz</title>
+    <title>hadoop-combat | Zzzz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="lmg">
     
 
     
-    <meta name="description" content="SummaryLinkedeList和ArrayList都实现了List接口，但是它们的工作原理却不一样。它们之间最主要的区别在于ArrayList是可改变大小的数组，而LinkedList是双向链接串列(doubly LinkedList)。ArrayList更受欢迎，很多场景下ArrayList比LinkedList更为适用。这篇文章中我们将会看看LinkedeList和ArrayList的不">
+    <meta name="description" content="MapReduceMapper处理的数据是由InputFormat分解过的数据集，其中InputFormat的作用是将数据集切割成小数据集InputSplits，每一个InputSplit将由一个Mapper负责处理。此外，InputFormat中还提供一个RecordReader的实现，并将一个InputSplit解析成对提供给了map函数。InputFormat的默认值是TextInputFo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ArrayList-and-LinkedList">
-<meta property="og:url" content="http://yoursite.com/2015/06/17/ArrayList-and-LinkedList/index.html">
+<meta property="og:title" content="hadoop-combat">
+<meta property="og:url" content="http://yoursite.com/2015/06/25/hadoop-combat/index.html">
 <meta property="og:site_name" content="Zzzz">
-<meta property="og:description" content="SummaryLinkedeList和ArrayList都实现了List接口，但是它们的工作原理却不一样。它们之间最主要的区别在于ArrayList是可改变大小的数组，而LinkedList是双向链接串列(doubly LinkedList)。ArrayList更受欢迎，很多场景下ArrayList比LinkedList更为适用。这篇文章中我们将会看看LinkedeList和ArrayList的不">
-<meta property="og:updated_time" content="2015-06-17T05:45:27.223Z">
+<meta property="og:description" content="MapReduceMapper处理的数据是由InputFormat分解过的数据集，其中InputFormat的作用是将数据集切割成小数据集InputSplits，每一个InputSplit将由一个Mapper负责处理。此外，InputFormat中还提供一个RecordReader的实现，并将一个InputSplit解析成对提供给了map函数。InputFormat的默认值是TextInputFo">
+<meta property="og:updated_time" content="2015-06-25T08:30:10.408Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ArrayList-and-LinkedList">
-<meta name="twitter:description" content="SummaryLinkedeList和ArrayList都实现了List接口，但是它们的工作原理却不一样。它们之间最主要的区别在于ArrayList是可改变大小的数组，而LinkedList是双向链接串列(doubly LinkedList)。ArrayList更受欢迎，很多场景下ArrayList比LinkedList更为适用。这篇文章中我们将会看看LinkedeList和ArrayList的不">
+<meta name="twitter:title" content="hadoop-combat">
+<meta name="twitter:description" content="MapReduceMapper处理的数据是由InputFormat分解过的数据集，其中InputFormat的作用是将数据集切割成小数据集InputSplits，每一个InputSplit将由一个Mapper负责处理。此外，InputFormat中还提供一个RecordReader的实现，并将一个InputSplit解析成对提供给了map函数。InputFormat的默认值是TextInputFo">
 
     
     <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
@@ -79,14 +79,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/17/ArrayList-and-LinkedList/" title="ArrayList-and-LinkedList" itemprop="url">ArrayList-and-LinkedList</a>
+      <a href="/2015/06/25/hadoop-combat/" title="hadoop-combat" itemprop="url">hadoop-combat</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-17T02:41:52.000Z" itemprop="datePublished"> 发表于 2015-06-17</time>
+    <time datetime="2015-06-25T08:21:40.000Z" itemprop="datePublished"> 发表于 2015-06-25</time>
     
   </p>
 </header>
@@ -95,24 +95,11 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Summary"><span class="toc-number">1.</span> <span class="toc-text">Summary</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LinkedList和ArrayList的区别"><span class="toc-number">2.</span> <span class="toc-text">LinkedList和ArrayList的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#什么场景下更适宜使用LinkedList，而不用ArrayList"><span class="toc-number">3.</span> <span class="toc-text">什么场景下更适宜使用LinkedList，而不用ArrayList</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MapReduce"><span class="toc-number">1.</span> <span class="toc-text">MapReduce</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="Summary">Summary</h1><p>LinkedeList和ArrayList都实现了List接口，但是它们的工作原理却不一样。它们之间最主要的区别在于ArrayList是可改变大小的数组，而LinkedList是双向链接串列(doubly LinkedList)。ArrayList更受欢迎，很多场景下ArrayList比LinkedList更为适用。这篇文章中我们将会看看LinkedeList和ArrayList的不同，而且我们试图来看看什么场景下更适宜使用LinkedList，而不用ArrayList。</p>
-<h1 id="LinkedList和ArrayList的区别">LinkedList和ArrayList的区别</h1><p>LinkedList和ArrayList的差别主要来自于Array和LinkedList数据结构的不同。如果你很熟悉Array和LinkedList，你很容易得出下面的结论：</p>
-<ol>
-<li>因为Array是基于索引(index)的数据结构，它使用索引在数组中搜索和读取数据是很快的。Array获取数据的时间复杂度是O(1),但是要删除数据却是开销很大的，因为这需要重排数组中的所有数据。</li>
-<li>相对于ArrayList，LinkedList插入是更快的。因为LinkedList不像ArrayList一样，不需要改变数组的大小，也不需要在数组装满的时候要将所有的数据重新装入一个新的数组，这是ArrayList最坏的一种情况，时间复杂度是O(n)，而LinkedList中插入或删除的时间复杂度仅为O(1)。ArrayList在插入数据时还需要更新索引（除了插入数组的尾部）。</li>
-<li>类似于插入数据，删除数据时，LinkedList也优于ArrayList。</li>
-<li>LinkedList需要更多的内存，因为ArrayList的每个索引的位置是实际的数据，而LinkedList中的每个节点中存储的是实际的数据和前后节点的位置。</li>
-</ol>
-<h1 id="什么场景下更适宜使用LinkedList，而不用ArrayList">什么场景下更适宜使用LinkedList，而不用ArrayList</h1><ol>
-<li>你的应用不会随机访问数据。因为如果你需要LinkedList中的第n个元素的时候，你需要从第一个元素顺序数到第n个数据，然后读取数据。</li>
-<li>你的应用更多的插入和删除元素，更少的读取数据。因为插入和删除元素不涉及重排数据，所以它要比ArrayList要快。</li>
-</ol>
-<p>你需要一个不同步的基于索引的数据访问时，请尽量使用ArrayList。ArrayList很快，也很容易使用。但是要记得要给定一个合适的初始大小，尽可能的减少更改数组的大小。</p>
-<p><strong>Reference</strong>：<a href="http://blog.csdn.net/jason0539" target="_blank" rel="external">http://blog.csdn.net/jason0539</a></p>
+		<h1 id="MapReduce">MapReduce</h1><p>Mapper处理的数据是由InputFormat分解过的数据集，其中InputFormat的作用是将数据集切割成小数据集InputSplits，每一个InputSplit将由一个Mapper负责处理。此外，InputFormat中还提供一个RecordReader的实现，并将一个InputSplit解析成<key,value>对提供给了map函数。InputFormat的默认值是TextInputFormat，它针对文本文件，按行将文本切割成InputSplits,并用LineRecordReader将InputSplit解析成<key,value>对，key是行在文本中的位置，value是文件中的一行。</key,value></key,value></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -126,7 +113,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Java/">Java</a>
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
   </div>
 
 </div>
@@ -135,7 +122,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/06/17/ArrayList-and-LinkedList/" data-title="ArrayList-and-LinkedList | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/06/25/hadoop-combat/" data-title="hadoop-combat | Zzzz" data-tsina="2692340043" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -149,18 +136,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/06/17/proxy-pattern/" title="代理模式">
+ <a href="/2015/07/01/JVM 垃圾回收器工作原理及使用实例介绍/" title="JVM 垃圾回收器工作原理及使用实例介绍">
   <strong>上一篇：</strong><br/>
   <span>
-  代理模式</span>
+  JVM 垃圾回收器工作原理及使用实例介绍</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/06/17/singleton-pattern/"  title="单例模式">
+<a href="/2015/06/18/java-object-init-sequence/"  title="java静态代码块、初始化块和构造方法的执行顺序">
  <strong>下一篇：</strong><br/> 
- <span>单例模式
+ <span>java静态代码块、初始化块和构造方法的执行顺序
 </span>
 </a>
 </div>
@@ -170,7 +157,7 @@
 	
 <section id="comments" class="comment">
     <!-- ��˵���ۿ� start -->
-    <div class="ds-thread" data-thread-key="2015/06/17/ArrayList-and-LinkedList/" data-title="ArrayList-and-LinkedList" data-url="http://yoursite.com/2015/06/17/ArrayList-and-LinkedList/"></div>
+    <div class="ds-thread" data-thread-key="2015/06/25/hadoop-combat/" data-title="hadoop-combat" data-url="http://yoursite.com/2015/06/25/hadoop-combat/"></div>
     <!-- ��˵���ۿ� end -->
     <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
     <script type="text/javascript">
