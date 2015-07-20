@@ -1,0 +1,581 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>j学习笔记 | Zzzz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="lmg">
+    
+
+    
+    <meta name="description" content="JVM的生命周期
+JVM实例对应了一个独立运行的java程序它是进程级别
+
+a)     启动。启动一个Java程序时，一个JVM实例就产生了，任何一个拥有public static void main(String[] args)函数的class都可以作为JVM实例运行的起点
+b)     运行。main()作为该程序初始线程的起点，任何其他线程均由该线程启动。JVM内部有两种线程：守护线程和非">
+<meta property="og:type" content="article">
+<meta property="og:title" content="j学习笔记">
+<meta property="og:url" content="http://yoursite.com/2015/07/20/jvm学习笔记/index.html">
+<meta property="og:site_name" content="Zzzz">
+<meta property="og:description" content="JVM的生命周期
+JVM实例对应了一个独立运行的java程序它是进程级别
+
+a)     启动。启动一个Java程序时，一个JVM实例就产生了，任何一个拥有public static void main(String[] args)函数的class都可以作为JVM实例运行的起点
+b)     运行。main()作为该程序初始线程的起点，任何其他线程均由该线程启动。JVM内部有两种线程：守护线程和非">
+<meta property="og:updated_time" content="2015-07-20T08:38:38.015Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="j学习笔记">
+<meta name="twitter:description" content="JVM的生命周期
+JVM实例对应了一个独立运行的java程序它是进程级别
+
+a)     启动。启动一个Java程序时，一个JVM实例就产生了，任何一个拥有public static void main(String[] args)函数的class都可以作为JVM实例运行的起点
+b)     运行。main()作为该程序初始线程的起点，任何其他线程均由该线程启动。JVM内部有两种线程：守护线程和非">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Zzzz" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Zzzz" title="Zzzz"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Zzzz">Zzzz</a></h1>
+				<h2 class="blog-motto">Do your best under limited conditions</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/20/jvm学习笔记/" title="j学习笔记" itemprop="url">j学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="lmg" target="_blank" itemprop="author">lmg</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-20T03:11:18.000Z" itemprop="datePublished"> 发表于 2015-07-20</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM的生命周期"><span class="toc-number">1.</span> <span class="toc-text">JVM的生命周期</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM的体系结构"><span class="toc-number">2.</span> <span class="toc-text">JVM的体系结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM类加载器"><span class="toc-number">3.</span> <span class="toc-text">JVM类加载器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM执行引擎"><span class="toc-number">4.</span> <span class="toc-text">JVM执行引擎</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM运行时数据区"><span class="toc-number">5.</span> <span class="toc-text">JVM运行时数据区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM垃圾回收"><span class="toc-number">6.</span> <span class="toc-text">JVM垃圾回收</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="JVM的生命周期">JVM的生命周期</h1><ol>
+<li>JVM实例对应了一个独立运行的java程序它是进程级别</li>
+</ol>
+<p>a)     启动。启动一个Java程序时，一个JVM实例就产生了，任何一个拥有public static void main(String[] args)函数的class都可以作为JVM实例运行的起点</p>
+<p>b)     运行。main()作为该程序初始线程的起点，任何其他线程均由该线程启动。JVM内部有两种线程：守护线程和非守护线程，main()属于非守护线程，守护线程通常由JVM自己使用，java程序也可以标明自己创建的线程是守护线程</p>
+<p>c)     消亡。当程序中的所有非守护线程都终止时，JVM才退出；若安全管理器允许，程序也可以使用Runtime类或者System.exit()来退出</p>
+<ol>
+<li>JVM执行引擎实例则对应了属于用户运行程序的线程它是线程级别的<h1 id="JVM的体系结构">JVM的体系结构</h1></li>
+<li><p>类装载器（ClassLoader）（用来装载.class文件）</p>
+</li>
+<li><p>执行引擎（执行字节码，或者执行本地方法）</p>
+</li>
+<li><p>运行时数据区（方法区、堆、java栈、PC寄存器、本地方法栈）</p>
+<h1 id="JVM类加载器">JVM类加载器</h1></li>
+</ol>
+<p>JVM整个类加载过程的步骤：</p>
+<ol>
+<li>装载<br>装载过程负责找到二进制字节码并加载至JVM中，JVM通过类名、类所在的包名通过ClassLoader来完成类的加载，同样，也采用以上三个元素来标识一个被加载了的类：类名+</li>
+</ol>
+<p>包名+ClassLoader实例ID。</p>
+<ol>
+<li>链接</li>
+</ol>
+<p>链接过程负责对二进制字节码的格式进行校验、初始化装载类中的静态变量以及解析类中调用的接口、类。</p>
+<p>完成校验后，JVM初始化类中的静态变量，并将其值赋为默认值。</p>
+<p>最后对类中的所有属性、方法进行验证，以确保其需要调用的属性、方法存在，以及具备应的权限（例如public、private域权限等），会造成NoSuchMethodError、NoSuchFieldError等错误信息。</p>
+<ol>
+<li>初始化</li>
+</ol>
+<p>初始化过程即为执行类中的静态初始化代码、构造器代码以及静态属性的初始化，在四种情况下初始化过程会被触发执行：</p>
+<p>调用了new；</p>
+<p>反射调用了类中的方法；</p>
+<p>子类调用了初始化；</p>
+<p>JVM启动过程中指定的初始化类。<br>JVM类加载顺序：</p>
+<p>JVM两种类装载器包括：启动类装载器和用户自定义类装载器。</p>
+<p>启动类装载器是JVM实现的一部分；</p>
+<p>用户自定义类装载器则是Java程序的一部分，必须是ClassLoader类的子类。</p>
+<p>JVM装载顺序：</p>
+<pre><code>Jvm启动时，由Bootstrap向<span class="built_ins">User</span>-Defined方向加载类；
+
+应用进行ClassLoader时，由<span class="built_ins">User</span>-Defined向Bootstrap方向查找并加载类；
+</code></pre><ol>
+<li>Bootstrap ClassLoader</li>
+</ol>
+<p>这是JVM的根ClassLoader，它是用C++实现的，JVM启动时初始化此ClassLoader，并由此ClassLoader完成$JAVA_HOME中jre/lib/rt.jar（Sun JDK的实现）中所有class文件的加载，这个jar中包含了java规范定义的所有接口以及实现。</p>
+<ol>
+<li>Extension ClassLoader</li>
+</ol>
+<p>JVM用此classloader来加载扩展功能的一些jar包。</p>
+<ol>
+<li>System ClassLoader</li>
+</ol>
+<p>JVM用此classloader来加载启动参数中指定的Classpath中的jar包以及目录，在Sun JDK中ClassLoader对应的类名为AppClassLoader。</p>
+<ol>
+<li>User-Defined ClassLoader</li>
+</ol>
+<p>User-DefinedClassLoader是Java开发人员继承ClassLoader抽象类自行实现的ClassLoader，基于自定义的ClassLoader可用于加载非Classpath中的jar以及目录。</p>
+<p>ClassLoader抽象类的几个关键方法：</p>
+<p>（1）       loadClass</p>
+<p>此方法负责加载指定名字的类，ClassLoader的实现方法为先从已经加载的类中寻找，如没有则继续从parent ClassLoader中寻找，如仍然没找到，则从System ClassLoader中寻找，最后再调用findClass方法来寻找，如要改变类的加载顺序，则可覆盖此方法</p>
+<p>（2）       findLoadedClass</p>
+<p>此方法负责从当前ClassLoader实例对象的缓存中寻找已加载的类，调用的为native的方法。</p>
+<p>（3）       findClass</p>
+<p>此方法直接抛出ClassNotFoundException，因此需要通过覆盖loadClass或此方法来以自定义的方式加载相应的类。</p>
+<p>（4）       findSystemClass</p>
+<p>此方法负责从System ClassLoader中寻找类，如未找到，则继续从Bootstrap ClassLoader中寻找，如仍然为找到，则返回null。</p>
+<p>（5）       defineClass</p>
+<p>此方法负责将二进制的字节码转换为Class对象</p>
+<p>（6）       resolveClass</p>
+<p>此方法负责完成Class对象的链接，如已链接过，则会直接返回。</p>
+<h1 id="JVM执行引擎">JVM执行引擎</h1><p>在执行方法时JVM提供了四种指令来执行：</p>
+<p>（1）invokestatic：调用类的static方法</p>
+<p>（2）invokevirtual：调用对象实例的方法</p>
+<p>（3）invokeinterface：将属性定义为接口来进行调用</p>
+<p>（4）invokespecial：JVM对于初始化对象（Java构造器的方法为：<init>）以及调用对象实例中的私有方法时。</init></p>
+<p>主要的执行技术有:</p>
+<p>解释，即时编译，自适应优化、芯片级直接执行</p>
+<p>（1）解释属于第一代JVM，</p>
+<p>（2）即时编译JIT属于第二代JVM，</p>
+<p>（3）自适应优化（目前Sun的HotspotJVM采用这种技术）则吸取第一代JVM和第二代</p>
+<p>JVM的经验，采用两者结合的方式</p>
+<p>开始对所有的代码都采取解释执行的方式，并监视代码执行情况，然后对那些经常调用的方法启动一个后台线程，将其编译为本地代码，并进行优化。若方法不再频繁使用，则取消编译过的代码，仍对其进行解释执行。</p>
+<h1 id="JVM运行时数据区">JVM运行时数据区</h1><p>第一块：PC寄存器</p>
+<p>PC寄存器是用于存储每个线程下一步将执行的JVM指令，如该方法为native的，则PC寄存器中不存储任何信息。</p>
+<p>第二块：JVM栈</p>
+<p>JVM栈是线程私有的，每个线程创建的同时都会创建JVM栈，JVM栈中存放的为当前线程中局部基本类型的变量（java中定义的八种基本类型：boolean、char、byte、short、int、long、float、double）、部分的返回结果以及Stack Frame，非基本类型的对象在JVM栈上仅存放一个指向堆上的地址</p>
+<p>第三块：堆（Heap）</p>
+<p>它是JVM用来存储对象实例以及数组值的区域，可以认为Java中所有通过new创建的对象的内存都在此分配，Heap中的对象的内存需要等待GC进行回收。</p>
+<p>（1）       堆是JVM中所有线程共享的，因此在其上进行对象内存的分配均需要进行加锁，这也导致了new对象的开销是比较大的</p>
+<p>（2）       Sun Hotspot JVM为了提升对象内存分配的效率，对于所创建的线程都会分配一块独立的空间TLAB（Thread Local Allocation Buffer），其大小由JVM根据运行的情况计算而得，在TLAB上分配对象时不需要加锁，因此JVM在给线程的对象分配内存时会尽量的在TLAB上分配，在这种情况下JVM中分配对象内存的性能和C基本是一样高效的，但如果对象过大的话则仍然是直接使用堆空间分配</p>
+<p>（3）       TLAB仅作用于新生代的Eden Space，因此在编写Java程序时，通常多个小的对象比大的对象分配起来更加高效。</p>
+<p>第四块：方法区域（Method Area）</p>
+<p>（1）在Sun JDK中这块区域对应的为PermanetGeneration，又称为持久代。</p>
+<p>（2）方法区域存放了所加载的类的信息（名称、修饰符等）、类中的静态变量、类中定义为final类型的常量、类中的Field信息、类中的方法信息，当开发人员在程序中通过Class</p>
+<p>对象中的getName、isInterface等方法来获取信息时，这些数据都来源于方法区域，同时方法区域也是全局共享的，在一定的条件下它也会被GC，当方法区域需要使用的内存超过其允许的大小时，会抛出OutOfMemory的错误信息。</p>
+<p>第五块：运行时常量池（Runtime Constant Pool）</p>
+<p>存放的为类中的固定的常量信息、方法和Field的引用信息等，其空间从方法区域中分配。</p>
+<p>第六块：本地方法堆栈（Native Method Stacks）</p>
+<p>JVM采用本地方法堆栈来支持native方法的执行，此区域用于存储每个native方法调用的状态。</p>
+<h1 id="JVM垃圾回收">JVM垃圾回收</h1><p>GC的基本原理：将内存中不再被使用的对象进行回收，GC中用于回收的方法称为收集器，由于GC需要消耗一些资源和时间，Java在对对象的生命周期特征进行分析后，按照新生代、旧生代的方式来对对象进行收集，以尽可能的缩短GC对应用造成的暂停</p>
+<p>（1）对新生代的对象的收集称为minor GC；</p>
+<p>（2）对旧生代的对象的收集称为Full GC；</p>
+<p>（3）程序中主动调用System.gc()强制执行的GC为Full GC。</p>
+<p>不同的对象引用类型， GC会采用不同的方法进行回收，JVM对象的引用分为了四种类型：</p>
+<p>（1）强引用：默认情况下，对象采用的均为强引用（这个对象的实例没有其他对象引用，GC时才会被回收）</p>
+<p>（2）软引用：软引用是Java中提供的一种比较适合于缓存场景的应用（只有在内存不够用的情况下才会被GC）</p>
+<p>（3）弱引用：在GC时一定会被GC回收</p>
+<p>（4）虚引用：由于虚引用只是用来得知对象是否被GC</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Study-Notes/">Study Notes</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/07/20/jvm学习笔记/" data-title="j学习笔记 | Zzzz" data-tsina="2692340043" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/07/20/jvm/"  title="jvm结构与机制">
+ <strong>下一篇：</strong><br/> 
+ <span>jvm结构与机制
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+    <!-- ��˵���ۿ� start -->
+    <div class="ds-thread" data-thread-key="2015/07/20/jvm学习笔记/" data-title="j学习笔记" data-url="http://yoursite.com/2015/07/20/jvm学习笔记/"></div>
+    <!-- ��˵���ۿ� end -->
+    <!-- ��˵����JS���� start (һ����ҳֻ������һ��) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'undefined'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+      <!-- ��˵����JS���� end -->
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Design-Pattern/" title="Design Pattern">Design Pattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Study-Notes/" title="Study Notes">Study Notes<sup>15</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Tcp-Ip/" title="Tcp/Ip">Tcp/Ip<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/springmvc/" title="springmvc">springmvc<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/singleton/" title="singleton">singleton<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/proxy/" title="proxy">proxy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HashMap/" title="HashMap">HashMap<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p>  不乱于心，不困于情！ <br/>
+			不畏将来，不念过往！</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2692340043" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SurperSniper" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:surpersniper1992@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="lmg">lmg</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"SuperSniper"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fnull' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
